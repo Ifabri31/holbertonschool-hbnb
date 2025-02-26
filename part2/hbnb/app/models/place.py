@@ -5,25 +5,50 @@ class Place(BaseModel):
     def __init__(self, title: str, price: float, latitude: float, longitude: float,  owner: User, description=""):
         super().__init__()
 
-        if len(title) > 100:
-            raise ValueError("Title must be 100 characters or less")
         self.title = title
         self.description = description
-
-        if price < 0:
-            raise ValueError("Price must be a positive value")
-        self.price = price
-        
-        if latitude < -90.0 and latitude > 90.0:
-            raise ValueError("Latitude must be within the range of -90 to 90")
+        self.price = price        
         self.latitude = latitude
-
-        if longitude < -180.0 and longitude > 180.0:
-            raise ValueError("Longitude must be within the range of -180 to 180")
         self.longitude = longitude
         self.owner = owner
         self.reviews = []
         self.amenities = []
+
+    @property
+    def title(self) -> str:
+        return self._title
+    @title.setter
+    def title(self, value: str):
+        if len(value) > 100 or len(value) < 1:
+            raise ValueError("Title must be 100 characters or less")
+        self._title = value
+    
+    @property
+    def price(self) -> float:
+        return self._price
+    @price.setter
+    def price(self, value: float):
+        if value < 0:
+            raise ValueError("Price must be a positive value")
+        self._price = value
+
+    @property
+    def latitude(self) -> float:
+        return self._latitude
+    @latitude.setter
+    def latitude(self, value: float):
+        if value < -90.0 or value > 90.0:
+            raise ValueError("Latitude must be within the range of -90 to 90")
+        self._latitude = value
+
+    @property
+    def longitude(self) -> float:
+        return self._longitude
+    @longitude.setter
+    def longitude(self, value: float):
+        if value < -180.0 or value > 180.0:
+            raise ValueError("Longitude must be within the range of -180 to 180")
+        self._longitude = value
         
     def add_review(self, review):
         """Add a review to the place."""
