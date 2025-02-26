@@ -16,8 +16,29 @@ class HBnBFacade:
         user = User(**user_data)
         self.user_repo.add(user)
         return user        
-        
+    
+    def get_user(self, user_id):
+        return self.user_repo.get(user_id)
+    
+    def get_user_by_email(self, email):
+        return self.user_repo.get_by_attribute('email', email)
+            
+# _____________________________________________________________________________            
+            
+    def create_place(self, place_data):
+        place = Place(**place_data)
+        self.place_repo.add(place)
+        return place
+    
     # Placeholder method for fetching a place by ID
     def get_place(self, place_id):
-        # Logic will be implemented in later tasks
-        pass
+        return self.place_repo.get(place_id)
+    
+#_______________________________________________________________________________
+
+    def create_review(self, review_data):
+        review = Review(**review_data)
+        self.review_repo.add(review)
+        return review
+    
+    def get_review
