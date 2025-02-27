@@ -41,4 +41,15 @@ class HBnBFacade:
         self.review_repo.add(review)
         return review
     
-    def get_review
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+#________________________________________________________________________________
+
+    def create_amenity(self, amenity_data):
+        amenity = Amenity(**amenity_data)
+        self.amenity_repo.add(amenity)
+        return amenity
+    
+    def get_amenity(self, amenity_id):
+        return self.amenity_repo.get(amenity_id)
