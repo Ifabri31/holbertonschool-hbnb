@@ -30,9 +30,6 @@ class User(BaseModel):
         if len(value) > 50 or len(value) < 1:
             raise ValueError("Last name must be within 1 to 50 characters")
         self._last_name = value
-        
-    #todo: add email validator ( buscar modulo re)
-    #def email_validator()
 
     @property
     def email(self):
