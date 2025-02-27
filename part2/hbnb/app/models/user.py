@@ -1,4 +1,5 @@
 from app.models.basemodel import BaseModel
+import re
 
 class User(BaseModel):
     def __init__(self, first_name: str, last_name: str, email: str, password: str, is_admin=False):
@@ -32,6 +33,18 @@ class User(BaseModel):
         
     #todo: add email validator ( buscar modulo re)
     #def email_validator()
+
+    @property
+    def email(self):
+        return self._email
+    @email.setter
+    def email(self, value):
+        pattern = r"[a-zA-Z0-9.%-+]+@[a-zA-z0-9.-]+\.[a-zA-Z]{2,}"
+        match = re.search( pattern, value)
+        if match:
+            self._email = value
+        else:
+            raise ValueError("The email is not correct")
 
     def add_place(self, place):
         self.places.append(place)

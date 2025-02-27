@@ -57,8 +57,3 @@ class Place(BaseModel):
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
         self.amenities.append(amenity)
-
-# Lorena = User("Lorena", "Leon", "dasd", "asd")        
-# girasoles = Place("Girasoles", 20.0, 23.0, -120.0, Lorena)
-
-# print(girasoles.owner.updated_at)

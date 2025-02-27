@@ -28,10 +28,3 @@ class Review(BaseModel):
         if value < 1 or value > 5:
             raise ValueError("Rating must be between 1 and 5")
         self._rating = value
-        
-
-# Lorena = User("Lorena", "Leon", "dasd", "asd")        
-# girasoles = Place("Girasoles", 20.0, 23.0, -120.0, Lorena)
-# review = Review("todo bien", 5, Lorena, girasoles)
-
-# print(review.place.price)
