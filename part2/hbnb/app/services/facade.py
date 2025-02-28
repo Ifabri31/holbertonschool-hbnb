@@ -57,7 +57,7 @@ class HBnBFacade:
 #________________________________________________________________________________
 
     def create_amenity(self, amenity_data):
-        amenity = Amenity(**amenity_data)
+        amenity = Amenity(amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
     
@@ -70,6 +70,10 @@ class HBnBFacade:
             amenity.update(data)
 
     def get_all_amenities(self):
+        list_amenity = []
         for obj in self.amenity_repo.get_all():
             if isinstance(obj, Amenity):
-                return obj
+                list_amenity.append(obj.name)
+        return list_amenity
+
+
