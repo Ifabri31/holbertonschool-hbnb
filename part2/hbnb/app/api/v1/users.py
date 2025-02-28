@@ -27,7 +27,9 @@ class UserList(Resource):
             return {'error': 'Email already registered'}, 400
 
         new_user = facade.create_user(user_data)
-        return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email, 'password': new_user.password}, 201
+        return {'id': new_user.id, 'first_name': new_user.first_name,
+                'last_name': new_user.last_name, 'email': new_user.email,
+                'password': new_user.password}, 201
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -38,7 +40,9 @@ class UserResource(Resource):
         user = facade.get_user(user_id)
         if not user:
             return {'error': 'User not found'}, 404
-        return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email, 'password': user.password}, 200
+        return {'id': user.id, 'first_name': user.first_name,
+                'last_name': user.last_name, 'email': user.email, 
+                'password': user.password}, 200
     
     @api.expect(user_model, validate=True)
     @api.response(404, "User not found")

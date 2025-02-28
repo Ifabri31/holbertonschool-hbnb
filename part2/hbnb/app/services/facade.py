@@ -57,16 +57,17 @@ class HBnBFacade:
 #________________________________________________________________________________
 
     def create_amenity(self, amenity_data):
-        amenity = Amenity(amenity_data)
+        amenity = Amenity(**amenity_data)
         self.amenity_repo.add(amenity)
+        return amenity
     
     def get_amenity(self, amenity_id):
         return self.amenity_repo.get(amenity_id)
     
-    def update_amenity(self, amenity_id, data):
-        amenity = self.get(amenity_id)
+    def update_amenity(self, amenity_id, amenity_data):
+        amenity = self.amenity_repo.get(amenity_id)
         if amenity:
-            amenity.update(data)
+            amenity.update(amenity_data)
 
     def get_all_amenities(self):
         list_amenity = []
