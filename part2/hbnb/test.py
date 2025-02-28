@@ -48,15 +48,10 @@
 from app.services import facade
 
 def test_create_amenity():
-    list = []
-    amenity1 = facade.create_amenity("WI-Fi")
-    amenity2 = facade.create_amenity("Spa")
-    amenity3 = facade.create_amenity("Pool")
-    print(amenity1.name)
-    print(amenity2)
-    print(amenity3)
-    list = facade.get_all_amenities()
-    print(list)
+    facade.create_amenity("WI-Fi")
+    facade.create_amenity("Spa")
+    facade.create_amenity("Pool")
+    print(facade.get_all_amenities())
 
 test_create_amenity()
 
