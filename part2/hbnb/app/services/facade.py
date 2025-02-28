@@ -22,6 +22,17 @@ class HBnBFacade:
     def get_user_by_email(self, email):
         return self.user_repo.get_by_attribute('email', email)
     
+    def get_all_users(self):
+        user_list = []
+        exclude = ['created_at', 'updated_at', 'is_admin', 'places', 'reviews', 'password']
+        for obj in self.user_repo.get_all():
+            filtered_dict = {}
+            for key, value in vars(obj).items():
+                if key not in exclude:
+                    filtered_dict[key] = value
+            user_list.append(filtered_dict)
+        return user_list
+
     def update_user(self, user_id, data):
         user = self.user_repo.get(user_id)
         if user:
@@ -35,6 +46,18 @@ class HBnBFacade:
     
     def get_place(self, place_id):
         return self.place_repo.get(place_id)
+    
+    def get_all_places(self):
+        places_list = []
+        exclude = ['description', 'owner', 'review', 'amenities', 'created_at', 'updated_at']
+        for obj in self.place_repo.get_all():
+            filtered_dict = {}
+            for key, value in vars(obj).items():
+                if key not in exclude:
+                    filtered_dict[key] = value
+            places_list.append(filtered_dict)
+        return places_list
+        
     
     def update_place(self, place_id, data):
         place = self.get(place_id)

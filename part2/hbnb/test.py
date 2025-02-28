@@ -1,15 +1,15 @@
-# from app.models.user import User
-# from app.models.basemodel import BaseModel
+from app.models.user import User
+from app.models.basemodel import BaseModel
+from app.services import facade
 
-# def test_user_creation():
-#     user = User(first_name="John", last_name="Doe", email="john.doe@example.com", password="hola")
-#     assert user.first_name == "John"
-#     assert user.last_name == "Doe"
-#     assert user.email == "john.doe@example.com"
-#     assert user.is_admin is False  # Default value
-#     print("User creation test passed!")
+def test_user_creation():
+    user = facade.create_user({"first_name":"John", "last_name": "Doe", 
+                        "email": "john.doe@example.com", "password": "hola"})
+    facade.create_user({"first_name":"Johny", "last_name": "Doeeti", 
+                        "email": "john@example.com", "password": "hola"})
+    print(facade.get_all_users())
 
-# test_user_creation()
+test_user_creation()
 
 
 # from app.models.place import Place
@@ -45,13 +45,13 @@
     
 # test_amenity_creation()
 
-from app.services import facade
+# from app.services import facade
 
-def test_create_amenity():
-    facade.create_amenity("WI-Fi")
-    facade.create_amenity("Spa")
-    facade.create_amenity("Pool")
-    print(facade.get_all_amenities())
+# def test_create_amenity():
+#     facade.create_amenity("WI-Fi")
+#     facade.create_amenity("Spa")
+#     facade.create_amenity("Pool")
+#     print(facade.get_all_amenities())
 
-test_create_amenity()
+# test_create_amenity()
 

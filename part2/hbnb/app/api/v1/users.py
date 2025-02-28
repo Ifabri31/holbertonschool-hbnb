@@ -30,6 +30,13 @@ class UserList(Resource):
         return {'id': new_user.id, 'first_name': new_user.first_name,
                 'last_name': new_user.last_name, 'email': new_user.email,
                 'password': new_user.password}, 201
+    
+    @api.response(200, 'List of users is successfully retrivied')
+    @api.response(404, 'Users list empty')
+    def get(self):
+        if not facade.get_all_users():
+            return {'error': 'User list empty'}
+        return facade.get_all_users()
 
 @api.route('/<user_id>')
 class UserResource(Resource):
