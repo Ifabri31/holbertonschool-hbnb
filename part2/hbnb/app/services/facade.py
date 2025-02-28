@@ -57,12 +57,11 @@ class HBnBFacade:
                     filtered_dict[key] = value
             places_list.append(filtered_dict)
         return places_list
-        
-    
-    def update_place(self, place_id, data):
+
+    def update_place(self, place_id, place_data):
         place = self.get(place_id)
         if place:
-            place.update(data)
+            place.update(place_data)
 #_______________________________________________________________________________
 
     def create_review(self, review_data):
