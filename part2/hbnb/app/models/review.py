@@ -3,13 +3,13 @@ from app.models.user import User
 from app.models.place import Place
 
 class Review(BaseModel):
-    def __init__(self, comment: str, rating: int, user: User, place: Place):
+    def __init__(self, comment: str, rating: int, user_id: str, place_id: str):
         super().__init__()
         
         self.comment = comment
         self.rating = rating
-        self.user = user
-        self.place = place
+        self.user_id = user_id
+        self.place_id = place_id
         
     @property
     def comment(self) -> str:

@@ -59,7 +59,7 @@ class HBnBFacade:
         return places_list
 
     def update_place(self, place_id, place_data):
-        place = self.get(place_id)
+        place = self.place_repo.get(place_id)
         if place:
             place.update(place_data)
 #_______________________________________________________________________________
@@ -69,13 +69,34 @@ class HBnBFacade:
         self.review_repo.add(review)
         return review
     
+    #todo: preguntar a nachos...
+    def get_all_reviews(self):
+        review_list = []
+        exclude = ['place_id', 'user_id', 'created_at', 'updated_at']
+        for obj in self.review_repo.get_all():
+            filter_dict = {}
+            for key, value in vars(obj).items():
+                if key not in exclude:
+                    filter_dict[key] = value
+            review_list.append(filter_dict)
+        return review_list
+    
+    def get_reviews_by_place(self, place_id):
+        for i in self.review_repo:
+            review_list = []
+            review_list.append(self.review_repo.get_by_attribute('place_id', place_id))
+        return review_list
+        
     def get_review(self, review_id):
         return self.review_repo.get(review_id)
     
-    def update_review(self, review_id, data):
-        review = self.get(review_id)
+    def update_review(self, review_id, review_data):
+        review = self.review_repo.get(review_id)
         if review:
-            review.update(data)
+            review.update(review_data)
+    
+    def delete_reviews(self, review_id):
+        return self.review_repo.delete(review_id)
 #________________________________________________________________________________
 
     def create_amenity(self, amenity_data):
