@@ -20,9 +20,6 @@ class UserList(Resource):
     def post(self):
         """Register a new user"""
         user_data = api.payload
-        new_user = facade.create_user(user_data)
-        if not new_user:
-                return {'error': 'Invalid input data'}, 400
         # Check if the data provided are correct
         try:
             new_user = facade.create_user(user_data)
