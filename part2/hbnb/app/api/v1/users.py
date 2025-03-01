@@ -20,16 +20,19 @@ class UserList(Resource):
     def post(self):
         """Register a new user"""
         user_data = api.payload
-
+        new_user = facade.create_user(user_data)
+        if not new_user:
+                return {'error': 'Invalid input data'}, 400
+        # Check if the data provided are correct
+        try:
+            new_user = facade.create_user(user_data)
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         # Simulate email uniqueness check (to be replaced by real validation with persistence)
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
-
-        new_user = facade.create_user(user_data)
-    #todo: Arreglar cuando los datos no son validos 
-        # if not facade.create_user(user_data):
-        #     return {'error': 'Invalid input data'}, 400
+        # Already OK
         return {'id': new_user.id, 'first_name': new_user.first_name,
                 'last_name': new_user.last_name, 'email': new_user.email,
                 'password': new_user.password}, 201
@@ -37,9 +40,10 @@ class UserList(Resource):
     @api.response(200, 'List of users is successfully retrivied')
     @api.response(404, 'Users list empty')
     def get(self):
+        """Get all users"""
         if not facade.get_all_users():
-            return {'error': 'User list empty'}
-        return facade.get_all_users()
+            return {'error': 'User list empty'}, 404
+        return facade.get_all_users(), 200
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -57,11 +61,15 @@ class UserResource(Resource):
     @api.expect(user_model, validate=True)
     @api.response(404, "User not found")
     @api.response(202, "Data updated successfully")
+    @api.response(400, 'Invalid input data')
     def put(self, user_id):
         """Update the user datas"""
         new_data = api.payload
         user = facade.get_user(user_id)
         if not user:
             return {"error": "User not found"}, 404
-        facade.update_user(user_id, new_data)
+        try:
+            facade.update_user(user_id, new_data)
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         return {'message': 'User updated successfully'}, 202
