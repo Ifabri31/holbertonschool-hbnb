@@ -82,11 +82,12 @@ class HBnBFacade:
         return review_list
     
     def get_reviews_by_place(self, place_id):
-        for i in self.review_repo:
-            review_list = []
-            review_list.append(self.review_repo.get_by_attribute('place_id', place_id))
-        return review_list
-        
+        # review_list = []
+        # for i in self.review_repo:
+        #     review_list.append(self.review_repo.get_by_attribute('place_id', place_id))
+        # return review_list
+        return self.review_repo.get_by_attribute('place_id', place_id)
+    
     def get_review(self, review_id):
         return self.review_repo.get(review_id)
     

@@ -35,7 +35,7 @@ class InMemoryRepository(Repository):
 
     def get(self, obj_id):
         return self._storage.get(obj_id)
-
+    
     def get_all(self):
         return list(self._storage.values())
 
@@ -49,4 +49,9 @@ class InMemoryRepository(Repository):
             del self._storage[obj_id]
 
     def get_by_attribute(self, attr_name, attr_value):
-        return next((obj for obj in self._storage.values() if getattr(obj, attr_name) == attr_value), None)
+        #return next((obj for obj in self._storage.values() if getattr(obj, attr_name) == attr_value), None)
+        obj_list = []
+        for obj in self._storage.values():
+            if getattr(obj, attr_name) == attr_value:
+                obj_list.append(obj)
+        return obj_list

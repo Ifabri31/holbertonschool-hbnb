@@ -13,7 +13,7 @@ review_model = api.model('Review', {
 
 # Define output by review_by_place
 review_by_place_model = api.model('ReviewbyPlace', {
-    'id': fields.String(desciption='Id by review'),
+    'id': fields.String(description='Id by review'),
     'comment': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)')
 })
@@ -70,7 +70,7 @@ class ReviewResource(Resource):
         """Delete a review"""
         if not facade.get_review(review_id):
             return {'error': 'Review not found'}, 404
-        facade.delete_reviews(review_id)
+        facade.delete_review(review_id)
         return {'message': 'Review deleted successfully'}, 200
 
 @api.route('/places/<place_id>/reviews')
@@ -79,7 +79,14 @@ class PlaceReviewList(Resource):
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get all reviews for a specific place"""
-        if not facade.get_reviews_by_place(place_id):
+        # if not facade.get_reviews_by_place(place_id):
+        #     return {'error': 'Place not found'}, 404
+        # for i in facade.get_reviews_by_place(place_id):
+        #     marshal(i, review_by_place_model), 200
+        reviews_list = facade.get_reviews_by_place(place_id)
+        if not reviews_list:
             return {'error': 'Place not found'}, 404
-        for i in facade.get_reviews_by_place(place_id):
-            marshal(i, review_by_place_model), 200
+        marsh_reviews = []
+        for review in reviews_list:
+            marsh_reviews.append(marshal(review, review_by_place_model))
+        return marsh_reviews, 200
