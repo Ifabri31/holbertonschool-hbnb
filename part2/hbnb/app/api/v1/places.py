@@ -45,8 +45,10 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         place_data = api.payload
-        #todo: validar input data
-        new_place = facade.create_place(place_data)
+        try:
+            new_place = facade.create_place(place_data)
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         return {'id': new_place.id, 'title': new_place.title,
                 'description': new_place.description,'price': new_place.price,
                 'latitude': new_place.latitude, 'longitude': new_place.longitude,
@@ -74,7 +76,7 @@ class PlaceResource(Resource):
                 'latitude': place.latitude, 'longitude': place.longitude,
                 'owner_id': place.owner_id, 'amenities': place.amenities}, 200
 
-    @api.expect(place_model)
+    @api.expect(place_model, validate=True)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
@@ -83,6 +85,9 @@ class PlaceResource(Resource):
         place_data = api.payload
         place = facade.get_place(place_id)
         if not place:
-            return {'error': 'Place not found'}
-        facade.update_place(place_id, place_data)
+            return {'error': 'Place not found'}, 404
+        try:
+            facade.update_place(place_id, place_data)
+        except ValueError:
+            return  {'error': 'Invalid input data'}, 400
         return {'message': 'Place updated successfully'}, 200

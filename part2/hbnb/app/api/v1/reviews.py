@@ -26,8 +26,10 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         review_data = api.payload
-        #todo: validar input data
-        new_review = facade.create_review(review_data)
+        try:
+            new_review = facade.create_review(review_data)
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         return {'id': new_review.id, 'comment': new_review.comment,
                 'rating': new_review.rating, 'user_id': new_review.user_id,
                 'place_id': new_review.place_id}, 201
@@ -59,9 +61,10 @@ class ReviewResource(Resource):
         if not facade.get_review(review_id):
             return {'error': 'Review not found'}
         review = api.payload
-        if not review:
-            return {'error': 'Invalid input data'}
-        facade.update_review(review_id, review)
+        try:
+            facade.update_review(review_id, review)
+        except ValueError:
+            return {'error': 'Invalid input data'}, 400
         return {'message': 'Review had updated'}, 200
 
     @api.response(200, 'Review deleted successfully')
