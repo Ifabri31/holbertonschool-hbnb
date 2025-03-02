@@ -5,7 +5,7 @@ api = Namespace('reviews', description='Review operations')
 
 # Define the review model for input validation and documentation
 review_model = api.model('Review', {
-    'text': fields.String(required=True, description='Text of the review'),
+    'comment': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
     'user_id': fields.String(required=True, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
@@ -73,7 +73,7 @@ class ReviewResource(Resource):
         """Delete a review"""
         if not facade.get_review(review_id):
             return {'error': 'Review not found'}, 404
-        facade.delete_review(review_id)
+        facade.delete_reviews(review_id)
         return {'message': 'Review deleted successfully'}, 200
 
 @api.route('/places/<place_id>/reviews')
