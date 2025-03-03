@@ -16,7 +16,6 @@ class AmenityList(Resource):
     def post(self):
         """Register a new amenity"""
         amenity_data = api.payload
-        #todo: validar input data
         try:
             new_amenity = facade.create_amenity(amenity_data)
         except ValueError:

@@ -120,17 +120,6 @@ class TestUserEndpoints(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 400)
 
-    # def test_create_place_invalid_price(self):
-    #     response = self.client.post('/api/v1/places/', json={
-    #             "title": "Cozy Apartment",
-    #             "description": "A nice place to stay",
-    #             "price": -50.0,  # Invalid price
-    #             "latitude": 37.7749,
-    #             "longitude": -122.4194,
-    #             "owner_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-    #     })
-    #     self.assertEqual(response.status_code, 400)  # Expecting validation error
-
     def test_create_review(self):
         # First, create a user to associate with the review
         self.client.post('/api/v1/users/', json={
