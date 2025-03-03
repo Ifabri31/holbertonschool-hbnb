@@ -86,15 +86,37 @@ class TestUserEndpoints(unittest.TestCase):
                 "owner_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         })
         self.assertEqual(response.status_code, 201)
-
-    def test_create_place_invalid_data(self):
+        
+    def test_create_place_invalid_price(self):
         response = self.client.post('/api/v1/places/', json={
-                "title": "",
-                "description": "",
-                "price": -100.0,
+                "title": "casa",
+                "description": "casa grande",
+                "price": -777.0, #invalid price
+                "latitude": 86.7749,
+                "longitude": -176.4194,
+                "owner_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        })
+        self.assertEqual(response.status_code, 400)    
+    
+    def test_create_place_invalid_tittle(self):
+        response = self.client.post('/api/v1/places/', json={
+                "title": "", #invalid tittle
+                "description": "casa grande",
+                "price": 100.0,
+                "latitude": 86.7749,
+                "longitude": -176.4194,
+                "owner_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        })
+        self.assertEqual(response.status_code, 400)
+
+    def test_create_place_invalid_longitude_and_latitude(self):
+        response = self.client.post('/api/v1/places/', json={
+                "title": "casa",
+                "description": "casa grande",
+                "price": 100.0,
                 "latitude": 137.7749,  # Invalid latitude
                 "longitude": -322.4194,  # Invalid longitude
-                "owner_id": ""
+                "owner_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
         })
         self.assertEqual(response.status_code, 400)
 
