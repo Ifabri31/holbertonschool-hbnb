@@ -1,5 +1,6 @@
 from app.models.basemodel import BaseModel
-from app import bcrypt
+from app.extensions import bcrypt  # Importar bcrypt desde extensions.py
+
 import re
 
 class User(BaseModel):
