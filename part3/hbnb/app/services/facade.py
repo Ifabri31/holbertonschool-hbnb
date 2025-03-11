@@ -37,9 +37,13 @@ class HBnBFacade:
         return self.user_repository.update(user_id, data)
     
     def hash_pass(self, user_data):
-        password_hashed = User(**user_data)
-        password = password_hashed.getattr("password")
-        return password_hashed.hash_password(password)
+        fk_user = User(**user_data)
+        password = fk_user.password
+        return fk_user.hash_password(password)
+    def password_exist(self, user_data):
+        for key in user_data:
+            if key is 'password':
+                return True
 # _____________________________________________________________________________            
             
     def create_place(self, place_data):

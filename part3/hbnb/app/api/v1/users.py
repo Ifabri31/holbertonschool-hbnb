@@ -24,7 +24,7 @@ class UserList(Resource):
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
             return {'error': 'Email already registered'}, 400
-        if user_data.getattr('password'):
+        if facade.password_exist(user_data):
             facade.hash_pass(user_data)
         else:
             return {'error': 'Password no hashed'}, 400
