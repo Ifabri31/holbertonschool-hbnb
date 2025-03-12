@@ -1,7 +1,10 @@
 from app.models.basemodel import BaseModel
-from app.extensions import bcrypt  # Importar bcrypt desde extensions.py
+from flask_bcrypt import Bcrypt
 
 import re
+
+bcrypt = Bcrypt()
+
 
 class User(BaseModel):
     def __init__(self, first_name: str, last_name: str, email: str, password: str, is_admin=False):

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.extensions import db  # Assuming you have set up SQLAlchemy in your Flask app
+from app import db  # Import db from app
 from app.models import User, Place, Review, Amenity  # Import your models
 
 class Repository(ABC):
@@ -57,11 +57,3 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
-    
-    #todo: implement get_one_or_more_by_attribute
-    # def get_one_or_more_by_attribute(self, attr_name, attr_value):
-    #     obj_list = []
-    #     for obj in self._storage.values():
-    #         if getattr(obj, attr_name) == attr_value:
-    #             obj_list.append(obj)
-    #     return obj_list
