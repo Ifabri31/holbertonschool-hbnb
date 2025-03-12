@@ -2,8 +2,10 @@ from flask import Flask
 from flask_restx import Api
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
+from flask_jwt_extended import JWTManager
 
 bcrypt = Bcrypt()
+jwt = JWTManager()
 db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
@@ -22,6 +24,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(reviews_ns, path='/api/v1/reviews')
     
     bcrypt.init_app(app)
+    jwt.init_app(app)
     db.init_app(app)
     
     return app
