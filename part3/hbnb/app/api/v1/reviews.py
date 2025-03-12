@@ -18,7 +18,7 @@ review_by_place_model = api.model('ReviewbyPlace', {
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)')
 })
 
-@api.route('/')
+@api.route('/reviews')
 class ReviewList(Resource):
     @api.expect(review_model)
     @api.response(201, 'Review successfully created')
@@ -39,7 +39,7 @@ class ReviewList(Resource):
         """Retrieve a list of all reviews"""
         return facade.get_all_reviews()
 
-@api.route('/<review_id>')
+@api.route('/reviews/<review_id>')
 class ReviewResource(Resource):
     @api.response(200, 'Review details retrieved successfully')
     @api.response(404, 'Review not found')

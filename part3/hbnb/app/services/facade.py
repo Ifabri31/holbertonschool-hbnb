@@ -2,14 +2,18 @@ from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
-from app.persistence.repository import SQLAlchemyRepository
+from app.persistence.repository import InMemoryRepository #SQLAlchemyRepository
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repository = SQLAlchemyRepository(User)
-        self.place_repository = SQLAlchemyRepository(Place)
-        self.review_repository = SQLAlchemyRepository(Review)
-        self.amenity_repository = SQLAlchemyRepository(Amenity)
+        # self.user_repository = SQLAlchemyRepository(User)
+        # self.place_repository = SQLAlchemyRepository(Place)
+        # self.review_repository = SQLAlchemyRepository(Review)
+        # self.amenity_repository = SQLAlchemyRepository(Amenity)
+        self.user_repository = InMemoryRepository()
+        self.place_repository = InMemoryRepository()
+        self.review_repository = InMemoryRepository()
+        self.amenity_repository = InMemoryRepository()
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -36,15 +40,15 @@ class HBnBFacade:
     def update_user(self, user_id, data):
         return self.user_repository.update(user_id, data)
     
-    def hash_pass(self, user_data):
-        fk_user = User(**user_data)
-        password = fk_user.password
-        return fk_user.hash_password(password)
-    #todo: Inecesary(?
-    def password_exist(self, user_data):
-        for key in user_data:
-            if key is 'password':
-                return True
+    # def hash_pass(self, user_data):
+    #     fk_user = User(**user_data)
+    #     password = fk_user.password
+    #     return fk_user.hash_password(password)
+    # #todo: Inecesary(?
+    # def password_exist(self, user_data):
+    #     for key in user_data:
+    #         if key is 'password':
+    #             return True
 # _____________________________________________________________________________            
             
     def create_place(self, place_data):

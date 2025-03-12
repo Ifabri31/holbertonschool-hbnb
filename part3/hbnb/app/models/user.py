@@ -47,6 +47,13 @@ class User(BaseModel):
         else:
             raise ValueError("The email is not correct")
 
+    @property
+    def password(self):
+        return self._password
+    @password.setter
+    def password(self, value):
+        self._password = self.hash_password(value)
+
     def add_place(self, place):
         self.places.append(place)
     
@@ -55,10 +62,9 @@ class User(BaseModel):
     
     def hash_password(self, password):
         """Hashes the password before storing it."""
-        hashed = bcrypt.generate_password_hash(password).decode('utf-8')
-        self.password = hashed
-        return hashed
+        return bcrypt.generate_password_hash(password).decode('utf-8')
     
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
+    
