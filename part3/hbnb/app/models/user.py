@@ -1,6 +1,5 @@
 from app.models.basemodel import BaseModel
 from flask_bcrypt import Bcrypt
-
 import re
 
 bcrypt = Bcrypt()
@@ -42,7 +41,7 @@ class User(BaseModel):
     @email.setter
     def email(self, value):
         pattern = r"[a-zA-Z0-9.%-+]+@[a-zA-z0-9.-]+\.[a-zA-Z]{2,}"
-        match = re.search( pattern, value)
+        match = re.search(pattern, value)
         if match:
             self._email = value
         else:

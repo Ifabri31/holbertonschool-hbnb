@@ -40,6 +40,7 @@ class HBnBFacade:
         fk_user = User(**user_data)
         password = fk_user.password
         return fk_user.hash_password(password)
+    #todo: Inecesary(?
     def password_exist(self, user_data):
         for key in user_data:
             if key is 'password':

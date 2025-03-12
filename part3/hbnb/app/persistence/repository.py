@@ -57,3 +57,9 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
+    
+    def get_one_or_more_by_attribute(self, attr_name, attr_value):
+        instans = getattr(self.model, attr_name)
+        consult = self.model.query.filter(instans == attr_value)
+        obj_list = consult.all()
+        return obj_list
