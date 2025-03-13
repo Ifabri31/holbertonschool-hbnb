@@ -106,6 +106,9 @@ class HBnBFacade:
     
     def delete_reviews(self, review_id):
         return self.review_repository.delete(review_id)
+    
+    def get_review_by_user_id(self, user_id):
+        return self.review_repository.get_one_or_more_by_attribute('user_id', user_id)
 #________________________________________________________________________________
 
     def create_amenity(self, amenity_data):

@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, jwt_required, current_user
+
 from app.services import facade
 
 api = Namespace('auth', description='Authentication operations')
@@ -35,5 +36,4 @@ class ProtectedResource(Resource):
     @jwt_required()
     def get(self):
         """A protected endpoint that requires a valid JWT token"""
-        current_user = get_jwt_identity()  # Retrieve the user's identity from the token
         return {'message': f'Hello, user {current_user}'}, 200
