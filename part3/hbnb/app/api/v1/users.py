@@ -1,8 +1,10 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from flask_bcrypt import Bcrypt
 import bcrypt
 
+bcrypt_hash = Bcrypt()
 
 api = Namespace('users', description='User operations')
 
@@ -74,21 +76,32 @@ class UserResource(Resource):
     @api.response(400, 'Invalid input data')
     @jwt_required()
     def put(self, user_id):
+        print(current_user.is_admin)
         """Update the user datas"""
-        if current_user.id != user_id:
+        if current_user.id != user_id and not current_user.is_admin:
             return {'error': 'Unauthorized action'}, 401
         
         user = facade.get_user(user_id)
-        if user.id != current_user.id:
-            return {'error': "Unauthorized action"}, 403
+        # if user.id != current_user.id:
+        #     return {'error': "Unauthorized action"}, 403
         new_data = api.payload
-        print(current_user.is_admin)
+
         if not user:
             return {"error": "User not found"}, 404
-        if new_data['email'] != user.email:
-            return {'error': 'You cannot modify email or password.'}, 400
-        if not bcrypt.checkpw(new_data['password'].encode(), user.password.encode()):
-            return {'error': 'You cannot modify email or password.'}, 400
+        
+        if not current_user.is_admin:
+            if new_data['email'] != user.email:
+                return {'error': 'You cannot modify email or password.'}, 400
+            if not bcrypt.checkpw(new_data['password'].encode(), user.password.encode()):
+                return {'error': 'You cannot modify email or password.'}, 400
+        
+        if new_data["email"]:
+            existing_user = facade.get_user_by_email(new_data["email"])
+            if existing_user and existing_user.id != user_id:
+                return {'error': 'Email already in use'}, 400
+            
+        if new_data["password"] != user.password:
+            new_data["password"] = bcrypt_hash.generate_password_hash(new_data["password"]).decode('utf-8')
         try:
             facade.update_user(user_id, new_data)
         except ValueError:
