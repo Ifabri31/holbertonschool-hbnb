@@ -4,6 +4,7 @@ from app.models.review import Review
 from app.models.amenity import Amenity
 from app.persistence.repository import InMemoryRepository #SQLAlchemyRepository
 
+
 class HBnBFacade:
     def __init__(self):
         # self.user_repository = SQLAlchemyRepository(User)

@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+import bcrypt
 
 
 api = Namespace('users', description='User operations')
@@ -13,14 +14,24 @@ user_model = api.model('User', {
     'password': fields.String(required=True, description='Password of the user')
 })
 
+admin = {
+    'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
+}
+admin1 = facade.create_user(admin)
+admin_user = facade.get_user(admin1.id)
+setattr(admin_user, "is_admin", True)
+
 @api.route('/')
 class UserList(Resource):
     @api.expect(user_model, validate=True)
     @api.response(201, 'User successfully created')
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
+    @jwt_required()
     def post(self):
         """Register a new user"""
+        if not current_user.is_admin:
+            return {'error': 'Admin privileges required'}, 403
         user_data = api.payload
         # Simulate email uniqueness check (to be replaced by real validation with persistence)
         existing_user = facade.get_user_by_email(user_data['email'])
@@ -67,10 +78,17 @@ class UserResource(Resource):
         if current_user.id != user_id:
             return {'error': 'Unauthorized action'}, 401
         
-        new_data = api.payload
         user = facade.get_user(user_id)
+        if user.id != current_user.id:
+            return {'error': "Unauthorized action"}, 403
+        new_data = api.payload
+        print(current_user.is_admin)
         if not user:
             return {"error": "User not found"}, 404
+        if new_data['email'] != user.email:
+            return {'error': 'You cannot modify email or password.'}, 400
+        if not bcrypt.checkpw(new_data['password'].encode(), user.password.encode()):
+            return {'error': 'You cannot modify email or password.'}, 400
         try:
             facade.update_user(user_id, new_data)
         except ValueError:
