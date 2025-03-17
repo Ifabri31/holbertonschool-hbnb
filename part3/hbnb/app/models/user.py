@@ -1,11 +1,21 @@
 from app.models.basemodel import BaseModel
-from flask_bcrypt import Bcrypt
+from sqlalchemy.ext.hybrid import hybrid_property
+#from flask_bcrypt import Bcrypt
 import re
+from app import db, bcrypt
 
-bcrypt = Bcrypt()
+#bcrypt = Bcrypt()
 
 
 class User(BaseModel):
+    __tablename__ = 'users'
+
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     def __init__(self, first_name: str, last_name: str, email: str, password: str, is_admin=False):
         super().__init__()
         
@@ -17,7 +27,7 @@ class User(BaseModel):
         self.places = []
         self.reviews = []
     
-    @property
+    @hybrid_property
     def first_name(self) -> str:
         return self._first_name
     @first_name.setter
@@ -26,7 +36,7 @@ class User(BaseModel):
             raise ValueError("First name must be within 1 to 50 characters")
         self._first_name = value
         
-    @property
+    @hybrid_property
     def last_name(self) -> str:
         return self._last_name
     @last_name.setter
@@ -35,7 +45,7 @@ class User(BaseModel):
             raise ValueError("Last name must be within 1 to 50 characters")
         self._last_name = value
 
-    @property
+    @hybrid_property
     def email(self):
         return self._email
     @email.setter
@@ -47,7 +57,7 @@ class User(BaseModel):
         else:
             raise ValueError("The email is not correct")
 
-    @property
+    @hybrid_property
     def password(self):
         return self._password
     @password.setter

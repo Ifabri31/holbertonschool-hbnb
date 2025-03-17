@@ -1,8 +1,9 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from flask_jwt_extended import jwt_required, current_user
 from flask_bcrypt import Bcrypt
 import bcrypt
+from app import create_app
 
 bcrypt_hash = Bcrypt()
 
@@ -16,12 +17,15 @@ user_model = api.model('User', {
     'password': fields.String(required=True, description='Password of the user')
 })
 
-admin = {
-    'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
-}
-admin1 = facade.create_user(admin)
-admin_user = facade.get_user(admin1.id)
-setattr(admin_user, "is_admin", True)
+app = create_app()
+
+with app.app_context():
+    admin = {
+        'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
+    }
+    admin1 = facade.create_user(admin)
+    admin_user = facade.get_user(admin1.id)
+    setattr(admin_user, "is_admin", True)
 
 @api.route('/')
 class UserList(Resource):
@@ -82,8 +86,6 @@ class UserResource(Resource):
             return {'error': 'Unauthorized action'}, 401
         
         user = facade.get_user(user_id)
-        # if user.id != current_user.id:
-        #     return {'error': "Unauthorized action"}, 403
         new_data = api.payload
 
         if not user:
@@ -102,6 +104,7 @@ class UserResource(Resource):
             
         if new_data["password"] != user.password:
             new_data["password"] = bcrypt_hash.generate_password_hash(new_data["password"]).decode('utf-8')
+
         try:
             facade.update_user(user_id, new_data)
         except ValueError:
