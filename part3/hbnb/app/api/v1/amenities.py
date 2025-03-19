@@ -14,7 +14,7 @@ class AmenityList(Resource):
     @api.expect(amenity_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
-    @jwt_required
+    @jwt_required()
     def post(self):
         """Register a new amenity"""
 
@@ -31,9 +31,14 @@ class AmenityList(Resource):
     def get(self):
         """Retrieve a list of all amenities"""
         amenity_list = facade.get_all_amenities()
+
         if not amenity_list:
             return {'error': 'List of amenities empty'}, 404
-        return facade.get_all_amenities(), 200
+
+        return [{
+            'id': amenity.id,
+            'name': amenity.name
+        } for amenity in amenity_list], 200
 
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
@@ -44,13 +49,15 @@ class AmenityResource(Resource):
         amenity = facade.get_amenity(amenity_id)
         if not amenity:
             return {'error': 'Amenity not found'}, 404
-        return {'id': amenity.id, 'name': amenity.name}, 200
+        return {'id': amenity.id, 
+                'name': amenity.name
+            }, 200
 
     @api.expect(amenity_model)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
     @api.response(400, 'Invalid input data')
-    @jwt_required
+    @jwt_required()
     def put(self, amenity_id):
         """Update an amenity's information"""
         if not current_user.is_admin:
@@ -61,6 +68,6 @@ class AmenityResource(Resource):
         except ValueError:
             return {'error': 'Invalid input data'}, 400
         if not amenity:
-            return {'error': 'Amenity not found'}, 404
+            return {'error': 'Amenity not found'}, 404       
         facade.update_amenity(amenity_id, amenity_data)
-        return {'messege': 'Amenity update successfully'}, 200
+        return {'message': 'Amenity update successfully'}, 200

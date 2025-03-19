@@ -2,7 +2,7 @@ from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
-from app.persistence.repository import SQLAlchemyRepository #InMemoryRepository
+from app.persistence.repository import SQLAlchemyRepository
 from app.persistence.user_repository import UserRepository
 
 
@@ -13,10 +13,6 @@ class HBnBFacade:
         self.review_repository = SQLAlchemyRepository(Review)
         self.amenity_repository = SQLAlchemyRepository(Amenity)
         self.user_repo = UserRepository
-        # self.user_repository = InMemoryRepository()
-        # self.place_repository = InMemoryRepository()
-        # self.review_repository = InMemoryRepository()
-        # self.amenity_repository = InMemoryRepository()
 
     def create_user(self, user_data):
         user = User(**user_data)
@@ -77,7 +73,7 @@ class HBnBFacade:
     #todo: preguntar a nachos...
     def get_all_reviews(self):
         review_list = []
-        exclude = ['place_id', 'user_id', 'created_at', 'updated_at']
+        exclude = ['created_at', 'updated_at']
         for obj in self.review_repository.get_all():
             filter_dict = {}
             for key, value in vars(obj).items():
@@ -121,5 +117,5 @@ class HBnBFacade:
         list_amenity = []
         for obj in self.amenity_repository.get_all():
             if isinstance(obj, Amenity):
-                list_amenity.append(obj.name)
+                list_amenity.append(obj)
         return list_amenity

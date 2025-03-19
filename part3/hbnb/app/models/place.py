@@ -1,8 +1,9 @@
 from app.models.basemodel import BaseModel
 from app.models.user import User
 from app import db
-from sqlalchemy.orm import validates
+from sqlalchemy.orm import validates, relationship
 from sqlalchemy import Column, Integer, ForeignKey
+from app.models.amenity import place_amenity
 
 class Place(BaseModel):
     __tablename__ = 'places'
@@ -13,6 +14,9 @@ class Place(BaseModel):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, default=False)
     owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    owner = relationship('User', back_populates='place') #todo: check
+    reviews = relationship('Review', back_populates='place')
+    amenities = relationship('Amenity', secondary=place_amenity, back_populates='place')
 
     def __init__(self, title: str, price: float, latitude: float, longitude: float,  owner_id: str, description=None):
         super().__init__()
@@ -26,40 +30,24 @@ class Place(BaseModel):
         self.reviews = []
         self.amenities = []
 
-    # @property
-    # def title(self) -> str:
-    #     return self._title
-    # @title.setter
     @validates('title')
     def validate_title(self, key, value: str):
         if len(value) > 100 or len(value) < 1:
             raise ValueError("Title must be 100 characters or less")
         return value
     
-    # @property
-    # def price(self) -> float:
-    #     return self._price
-    # @price.setter
     @validates('price')
     def validate_price(self, key, value: float):
         if value < 0:
             raise ValueError("Price must be a positive value")
         return value
 
-    # @property
-    # def latitude(self) -> float:
-    #     return self._latitude
-    # @latitude.setter
     @validates('latitude')
     def validate_latitude(self, key, value: float):
         if value < -90.0 or value > 90.0:
             raise ValueError("Latitude must be within the range of -90 to 90")
         return value
 
-    # @property
-    # def longitude(self) -> float:
-    #     return self._longitude
-    # @longitude.setter
     @validates('longitude')
     def validate_longitude(self, key, value: float):
         if value < -180.0 or value > 180.0:

@@ -2,10 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask_jwt_extended import jwt_required, current_user
 from flask_bcrypt import Bcrypt
-import bcrypt
-#from app import create_app
-
-bcrypt_hash = Bcrypt()
+from app import bcrypt
 
 api = Namespace('users', description='User operations')
 
@@ -16,16 +13,6 @@ user_model = api.model('User', {
     'email': fields.String(required=True, description='Email of the user'),
     'password': fields.String(required=True, description='Password of the user')
 })
-
-# app = create_app()
-
-# with app.app_context():
-#     admin = {
-#         'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
-#     }
-#     admin1 = facade.create_user(admin)
-#     admin_user = facade.get_user(admin1.id)
-#     setattr(admin_user, "is_admin", True)
 
 @api.route('/')
 class UserList(Resource):
@@ -58,8 +45,11 @@ class UserList(Resource):
         if not facade.get_all_users():
             return {'error': 'User list empty'}, 404
         all_users = facade.get_all_users()
-        return [{'id': user["id"], 'first_name': user["first_name"], 'last_name': user["last_name"], 'email': user["email"]} for user in all_users], 200
-        # return facade.get_all_users(), 200
+        return [{'id': user["id"], 
+                 'first_name': user["first_name"], 
+                 'last_name': user["last_name"], 
+                 'email': user["email"]
+            } for user in all_users], 200
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -95,23 +85,20 @@ class UserResource(Resource):
         if not current_user.is_admin:
             if new_data['email'] != user.email:
                 return {'error': 'You cannot modify email or password.'}, 400
-            if not bcrypt.checkpw(new_data['password'].encode(), user.password.encode()):
+            if not bcrypt.check_password_hash(new_data['password'], user.password):
                 return {'error': 'You cannot modify email or password.'}, 400
         
         if new_data["email"]:
             existing_user = facade.get_user_by_email(new_data["email"])
             if existing_user and existing_user.id != user_id:
                 return {'error': 'Email already in use'}, 400
-            
-        if new_data["password"] != user.password:
-            new_data["password"] = bcrypt_hash.generate_password_hash(new_data["password"]).decode('utf-8')
 
         try:
-            facade.update_user(user_id, new_data)
+            update_user = facade.update_user(user_id, new_data)
         except ValueError:
             return {'error': 'Invalid input data'}, 400
-        return {'id': user.id, 
-                'first_name': user.first_name,
-                'last_name': user.last_name, 
-                'email': user.email
-            }, 200
+        return {'id': update_user.id, 
+                'first_name': update_user.first_name,
+                'last_name': update_user.last_name, 
+                'email': update_user.email
+            }, 202

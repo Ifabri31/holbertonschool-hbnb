@@ -74,8 +74,13 @@ class PlaceList(Resource):
         if not facade.get_all_places():
             return {'error': 'List of place is empty'}, 404
         all_places = facade.get_all_places()
-        return [{'id': place['id'], 'title': place['title'], 'price': place['price'], 'latitude': place['latitude'], 'longitude': place['longitude'], 'owner_id': place['owner_id']} for place in all_places], 200
-        #return facade.get_all_places(), 200
+        return [{'id': place['id'], 
+                 'title': place['title'], 
+                 'price': place['price'], 
+                 'latitude': place['latitude'], 
+                 'longitude': place['longitude'], 
+                 'owner_id': place['owner_id']
+            } for place in all_places], 200
         
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -89,7 +94,8 @@ class PlaceResource(Resource):
         
         owner = facade.get_user(place.owner_id)
         all_amenities = facade.get_all_amenities()
-
+        all_reviews = facade.get_all_reviews()
+        
         return {'id': place.id, 
                 'title': place.title,
                 'description': place.description,''
@@ -102,10 +108,14 @@ class PlaceResource(Resource):
                     'last_name': owner.last_name,
                     'email': owner.email
                 }, 
+                'reviews': [{
+                    'id': review['id'],
+                    'comment': review['comment'],
+                    'rating': review['rating']
+                } for review in all_reviews if review['place_id'] == place_id],
                 'amenities': [{
                     'id': amenity.id,
-                    'name': amenity.name
-            } for amenity in all_amenities if amenity.places == place.id]
+                    'name': amenity.name} for amenity in all_amenities if amenity.place == place.id]
         }, 200
 
     @api.expect(place_model, validate=True)
@@ -121,8 +131,9 @@ class PlaceResource(Resource):
         place_data = api.payload
         place = facade.get_place(place_id)
 
-        if place.owner_id != current_user.id:
-            return {'error': 'Unauthorized action'}, 403
+        if not current_user.is_admin:
+            if place.owner_id != current_user.id:
+                return {'error': 'Unauthorized action'}, 403
         if not place:
             return {'error': 'Place not found'}, 404
         

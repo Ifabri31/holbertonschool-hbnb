@@ -1,3 +1,4 @@
+from tokenize import Comment
 from flask_restx import Namespace, Resource, fields, marshal
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
 from app.services import facade
@@ -44,14 +45,22 @@ class ReviewList(Resource):
             new_review = facade.create_review(review_data)
         except ValueError:
             return {'error': 'Invalid input data'}, 400
-        return {'id': new_review.id, 'comment': new_review.comment,
-                'rating': new_review.rating, 'user_id': new_review.user_id,
-                'place_id': new_review.place_id}, 201
+        return {'id': new_review.id, 
+                'comment': new_review.comment,
+                'rating': new_review.rating, 
+                'user_id': new_review.user_id,
+                'place_id': new_review.place_id
+            }, 201
 
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
-        return facade.get_all_reviews()
+        all_reviews = facade.get_all_reviews()
+        return [{
+            'id': review['id'], 
+            'comment': review['comment'],
+            'rating': review['rating'], 
+        } for review in all_reviews], 200
 
 @api.route('/reviews/<review_id>')
 class ReviewResource(Resource):
@@ -62,9 +71,12 @@ class ReviewResource(Resource):
         review = facade.get_review(review_id)
         if not review:
             return {'error': 'Review not found'}, 404
-        return {'id': review.id, 'comment': review.comment,
-                'rating': review.rating, 'user_id': review.user_id,
-                'place_id': review.place_id}, 200
+        return {'id': review.id, 
+                'comment': review.comment,
+                'rating': review.rating, 
+                'user_id': review.user_id,
+                'place_id': review.place_id
+            }, 200
 
     @api.expect(review_model)
     @api.response(200, 'Review updated successfully')
@@ -79,8 +91,9 @@ class ReviewResource(Resource):
             return {'error': 'Review not found'}
         
         existing_review = facade.get_review(review_id)
-        if existing_review.user_id != current_user.id:
-            return {'error': 'Unauthorized action'}, 403
+        if not current_user.is_admin:
+            if existing_review.user_id != current_user.id:
+                return {'error': 'Unauthorized action'}, 403
        
         review = api.payload
         
@@ -100,8 +113,9 @@ class ReviewResource(Resource):
         existing_review = facade.get_review(review_id)
         if not existing_review:
             return {'error': 'Review not found'}, 404
-        if existing_review.user_id != current_user.id:
-            return {'error': 'Unauthorized action'}, 403
+        if not current_user.is_admin:
+            if existing_review.user_id != current_user.id:
+                return {'error': 'Unauthorized action'}, 403
         
         facade.delete_reviews(review_id)
         return {'message': 'Review deleted successfully'}, 200
