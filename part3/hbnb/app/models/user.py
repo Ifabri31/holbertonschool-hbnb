@@ -1,8 +1,9 @@
 from app.models.basemodel import BaseModel
-from sqlalchemy.ext.hybrid import hybrid_property
+#from sqlalchemy.ext.hybrid import hybrid_property
 #from flask_bcrypt import Bcrypt
 import re
 from app import db, bcrypt
+from sqlalchemy.orm import validates
 
 #bcrypt = Bcrypt()
 
@@ -14,7 +15,7 @@ class User(BaseModel):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False) 
 
     def __init__(self, first_name: str, last_name: str, email: str, password: str, is_admin=False):
         super().__init__()
@@ -23,56 +24,61 @@ class User(BaseModel):
         self.last_name = last_name
         self.email = email
         self.password = password
-        self.is_admin = is_admin
+        self.is_admin = int(is_admin)
         self.places = []
         self.reviews = []
     
-    @hybrid_property
-    def first_name(self) -> str:
-        return self._first_name
-    @first_name.setter
-    def first_name(self, value: str):
+    # @hybrid_property
+    # def first_name(self) -> str:
+    #     return self._first_name
+    # @first_name.setter
+    @validates('first_name')
+    def validate_first_name(self, key, value: str):
         if len(value) > 50 or len(value) < 1:
             raise ValueError("First name must be within 1 to 50 characters")
-        self._first_name = value
+        return value
         
-    @hybrid_property
-    def last_name(self) -> str:
-        return self._last_name
-    @last_name.setter
-    def last_name(self, value: str):
+    # @hybrid_property
+    # def last_name(self) -> str:
+    #     return self._last_name
+    # @last_name.setter
+    @validates('last_name')
+    def validate_last_name(self, key, value: str):
         if len(value) > 50 or len(value) < 1:
             raise ValueError("Last name must be within 1 to 50 characters")
-        self._last_name = value
+        return value
 
-    @hybrid_property
-    def email(self):
-        return self._email
-    @email.setter
-    def email(self, value):
+    # @hybrid_property
+    # def email(self):
+    #     return self._email
+    # @email.setter
+    @validates('email')
+    def validate_email(self, key, value):
         pattern = r"[a-zA-Z0-9.%-+]+@[a-zA-z0-9.-]+\.[a-zA-Z]{2,}"
         match = re.search(pattern, value)
         if match:
-            self._email = value
+            return value
         else:
             raise ValueError("The email is not correct")
 
-    @hybrid_property
-    def password(self):
-        return self._password
-    @password.setter
-    def password(self, value):
-        self._password = self.hash_password(value)
+    #def hash_password(self, password):
+    @validates('password')
+    def validate_password(self, key, password):
+        """Hashes the password before storing it."""
+        return bcrypt.generate_password_hash(password).decode('utf-8')
+    
+    # @hybrid_property
+    # def password(self):
+    #     return self._password
+    # @password.setter
+    #def password(self, value):
+    #    self._password = self.hash_password(value)
 
     def add_place(self, place):
         self.places.append(place)
     
     def add_reviews(self, review):
         self.reviews.append(review)
-    
-    def hash_password(self, password):
-        """Hashes the password before storing it."""
-        return bcrypt.generate_password_hash(password).decode('utf-8')
     
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""

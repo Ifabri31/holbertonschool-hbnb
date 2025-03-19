@@ -3,7 +3,7 @@ from app.services import facade
 from flask_jwt_extended import jwt_required, current_user
 from flask_bcrypt import Bcrypt
 import bcrypt
-from app import create_app
+#from app import create_app
 
 bcrypt_hash = Bcrypt()
 
@@ -17,15 +17,15 @@ user_model = api.model('User', {
     'password': fields.String(required=True, description='Password of the user')
 })
 
-app = create_app()
+# app = create_app()
 
-with app.app_context():
-    admin = {
-        'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
-    }
-    admin1 = facade.create_user(admin)
-    admin_user = facade.get_user(admin1.id)
-    setattr(admin_user, "is_admin", True)
+# with app.app_context():
+#     admin = {
+#         'first_name': "Admin", 'last_name': "Admin", 'email':"admin@admin.com", 'password': "admin"
+#     }
+#     admin1 = facade.create_user(admin)
+#     admin_user = facade.get_user(admin1.id)
+#     setattr(admin_user, "is_admin", True)
 
 @api.route('/')
 class UserList(Resource):
@@ -57,7 +57,9 @@ class UserList(Resource):
         """Get all users"""
         if not facade.get_all_users():
             return {'error': 'User list empty'}, 404
-        return facade.get_all_users(), 200
+        all_users = facade.get_all_users()
+        return [{'id': user["id"], 'first_name': user["first_name"], 'last_name': user["last_name"], 'email': user["email"]} for user in all_users], 200
+        # return facade.get_all_users(), 200
 
 @api.route('/<user_id>')
 class UserResource(Resource):
@@ -80,7 +82,6 @@ class UserResource(Resource):
     @api.response(400, 'Invalid input data')
     @jwt_required()
     def put(self, user_id):
-        print(current_user.is_admin)
         """Update the user datas"""
         if current_user.id != user_id and not current_user.is_admin:
             return {'error': 'Unauthorized action'}, 401

@@ -73,7 +73,9 @@ class PlaceList(Resource):
         """Retrieve a list of all places"""
         if not facade.get_all_places():
             return {'error': 'List of place is empty'}, 404
-        return facade.get_all_places(), 200
+        all_places = facade.get_all_places()
+        return [{'id': place['id'], 'title': place['title'], 'price': place['price'], 'latitude': place['latitude'], 'longitude': place['longitude'], 'owner_id': place['owner_id']} for place in all_places], 200
+        #return facade.get_all_places(), 200
         
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -84,10 +86,27 @@ class PlaceResource(Resource):
         place = facade.get_place(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
-        return {'id': place.id, 'title': place.title,
-                'description': place.description,'price': place.price,
-                'latitude': place.latitude, 'longitude': place.longitude,
-                'owner_id': place.owner_id, 'amenities': place.amenities}, 200
+        
+        owner = facade.get_user(place.owner_id)
+        all_amenities = facade.get_all_amenities()
+
+        return {'id': place.id, 
+                'title': place.title,
+                'description': place.description,''
+                'price': place.price,
+                'latitude': place.latitude, 
+                'longitude': place.longitude,
+                'owner': {
+                    'id': owner.id,
+                    'first_name': owner.first_name,
+                    'last_name': owner.last_name,
+                    'email': owner.email
+                }, 
+                'amenities': [{
+                    'id': amenity.id,
+                    'name': amenity.name
+            } for amenity in all_amenities if amenity.places == place.id]
+        }, 200
 
     @api.expect(place_model, validate=True)
     @api.response(200, 'Place updated successfully')
