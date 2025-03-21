@@ -10,10 +10,8 @@ HBNB is a web application that allows users to register, search and reserve plac
 - [Project Structure](#estructura-del-proyecto)
 - [Architecture and Layers](#arquitectura-y-capas)
 - [Diagrams](#diagramas)
-- [Models](#modelos)
 - [Tests](#pruebas)
 - [Use](#uso)
-- [Details and Characteristics](#detalles-y-características)
 - [Authors](#autores)
 
 ## 📝 Description of the Project
@@ -69,4 +67,241 @@ The Facade Pattern is used to provide a unified interface to the underlying syst
 5. APIs (Bridge Between Layers)
 APIs act as the bridge between different layers, ensuring smooth communication.
 
-## Diagrams
+## 👓 Diagrams
+
+To better understand the architecture and interactions within the HBnB project, we provide three key diagrams:
+
+- Class Diagram – Represents the structure of the system, including the main classes and their relationships.
+- Sequence Diagram – Shows the flow of interactions between components during a specific process.
+- Layer Diagram – Illustrates the architectural layers of the system and their dependencies.
+
+These diagrams help visualize the design and functionality of the project, ensuring clarity in system development and maintenance.
+
+
+### 1. *Class Diagram*
+
+The Class Diagram provides an overview of the system's object-oriented structure, representing the main classes, their attributes, methods, and relationships (inheritance, associations, dependencies).
+
+In the HBnB project, the class diagram includes key entities such as:
+
+- User – Represents application users with authentication details.
+- Place – Stores information about listings, including location and amenities.
+- Review – Contains user-generated reviews linked to places.
+- Amenity – Represents additional features available in a place.
+- Base - Contains attributes and methods that will be shared by the other classes
+
+This diagram helps in understanding how different parts of the system interact and how data flows between objects.
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Clases.png)
+
+---
+
+### 2. *Sequence Diagram*
+
+A Sequence Diagram illustrates the flow of interactions between different system components in a specific use case. It helps visualize how requests are processed and how different objects communicate over time.
+
+For the HBnB project, a typical sequence diagram might illustrate:
+
+### User Registration
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Secuencias%20-%20User%20Registration.png)
+
+### Description:
+
+This flow represents the process of registering a new user. It involves data validation and verification of the user's existence in the database.
+
+### Process Steps:
+
+1. The user requests to register using the API.
+2. The API sends the data to the business logic layer (BL).
+3. BL validates the user's data:
+    - If the data is invalid, an error is returned.
+4. BL queries the database to see if the user already exists:
+    - If the user exists, an error indicating “User exists” is returned.
+    - If it does not exist, a new user is inserted in the database.
+5. success message is returned if the user was successfully registered.
+
+---
+
+### Place Creation
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Secuencias%20-%20Place%20Creation.png)
+
+### Description:
+
+This flow shows how the creation of a new site is handled, from data validation to insertion into the database.
+
+### Process Steps:
+
+1. The user requests to create a place via the API.
+2. The API sends the place data to BL.
+3. BL validates the place data:
+    - If the data is invalid, an error is returned.
+4. BL inserts the new place into the database.
+    - If the place already exists, a “Place exists” error is returned.
+5. A success message is returned if the place was created successfully.
+
+---
+
+### Review Submission
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Secuencias%20-%20Review.png)
+
+### Description:
+
+This flow details how the submission of a review for a given location is processed.
+
+### Process Steps:
+
+1. The user submits a review via the API.
+2. The API sends the review data to BL
+3. BL validates the review data:
+    - If the data is invalid, an error is returned.
+4. BL checks if a user review already exists for that location:
+    - If the review already exists, an error is returned stating “User Review Exist for Current Place”.
+5. The new review is inserted into the database and a success message is returned.
+
+---
+
+### Fetching List of Places
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Secuencias%20-Fetching%20List%20of%20Places.png)
+
+### Description:
+
+This flow shows the process of retrieving a list of places stored in the database.
+
+### Process Steps:
+
+1. The user requests the list of places via the API.
+2. The API sends the request to BL.
+3. BL queries the places in the database:
+    - If no places are found, a message indicating “Places Not Found” is returned.
+4. The list of found places is returned.
+
+---
+
+### 3. *Layer Diagram*
+
+The Layer Diagram provides a high-level view of the system architecture, illustrating how different layers interact while maintaining a clean separation of concerns.
+
+For HBnB, the main layers include:
+
+- Presentation Layer – The UI (web client) and API endpoints that interact with users.
+- Business Logic Layer (BLL) – Handles application logic, validation, and processing.
+- Persistence Layer – Manages database storage using SQLAlchemy.
+- Facade Layer – Serves as an intermediary between the API and core business logic.
+
+![Class Diagram](https://github.com/Ifabri31/holbertonschool-hbnb/blob/main/images/Diagrama%20de%20Capas.png)
+
+## 👨‍💻 Test and Use
+
+### ~~Testing~~
+
+To run the tests, navigate to the `part3/hbnb` directory and execute the `test.py` file:
+
+```
+python test.py
+```
+
+The tests are written using Python’s `unittest` module and cover the API endpoints for Users, Places, Reviews, and Amenities.
+
+### Tested Endpoints
+
+1. User Endpoints
+  - POST /api/v1/users - Create a user
+  - GET /api/v1/users - List all users
+  - GET /api/v1/users/{id} - Retrieve a user by ID
+  - PUT /api/v1/users/{id} - Update a user
+    
+Example Test - Creating a User
+
+Input:
+
+```
+{
+  "first_name": "Jane",
+  "last_name": "Doe",
+  "email": "jane.doe@example.com"
+}
+```
+*Expected Result:* Status code 201 (Created)
+
+2. Place Endpoints
+  - POST /api/v1/places/ - Create a place
+  - GET /api/v1/places/ - List all places
+  - GET /api/v1/places/{id} - Retrieve a place by ID
+  - PUT /api/v1/places/{id} - Update a place
+    
+Example Test - Creating a Place
+
+Input:
+
+```
+{
+  "title": "Cozy Apartment",
+  "description": "A nice place to stay",
+  "price": 100.0,
+  "latitude": 37.7749,
+  "longitude": -122.4194,
+  "owner_id": "1"
+}
+```
+*Expected Result:* Status code 201 (Created)
+
+3. Review Endpoints
+  - POST /api/v1/reviews/ - Create a review
+  - GET /api/v1/reviews/ - List all reviews
+  - GET /api/v1/reviews/{id} - Retrieve a review by ID
+  - DELETE /api/v1/reviews/{id} - Delete a review
+    
+Example Test - Creating a Review
+
+Input:
+
+```
+{
+  "text": "Great place to stay!",
+  "rating": 5,
+  "user_id": "1",
+  "place_id": "1"
+}
+```
+*Expected Result:* Status code 201 (Created)
+
+4. Amenity Endpoints
+- POST /api/v1/amenities/ - Create an amenity
+- GET /api/v1/amenities/ - List all amenities
+- GET /api/v1/amenities/{id} - Retrieve an amenity by ID
+- PUT /api/v1/amenities/{id} - Update an amenity
+    
+Example Test - Creating an Amenity
+
+Input:
+
+```
+{
+  "name": "WiFi"
+}
+```
+*Expected Result:* Status code 201 (Created)
+
+### ~~Use~~
+
+#### Running the Application
+
+To start the application, navigate to the `part3/hbnb` directory and execute the `run.py` file:
+
+```
+python run.py
+```
+
+## 😎 Authors
+
+* **[Franco Reyes](https://github.com/Franco-byte)**
+* **[Fabrizzio Oviedo](https://github.com/Ifabri31)**
+* **[Jonathan Pérez](https://github.com/Jonatha32)**
+
+
+
+
