@@ -1,20 +1,23 @@
+from sqlalchemy import text
 from app import create_app, db
 from app.models import User, Amenity
 import uuid
 import os
 
-from part2.hbnb.app.api.v1 import amenities
-
 app = create_app()
 
 with app.app_context():
-
     if not os.path.exists('development.db'):
         with open('app/persistence/db.sql', 'r') as file:
             script = file.read()
-
-        with db.engine.connect() as conn:
-            conn.execute(script)
+        try:
+            with db.engine.connect() as conn:
+                for statement in script.split(";"):
+                    if statement.strip():
+                        conn.execute(text(statement))
+                        conn.commit()
+        except Exception as e:
+            print(f"Error executing script: {e}")
 
     admin_user = User.query.filter_by(email="admin@hbnb.io").first()
     if not admin_user:
@@ -31,7 +34,7 @@ with app.app_context():
     for name in amenity_names:
         amenity = Amenity.query.filter_by(name=name).first()
         if not amenity:
-            new_amenity = Amenity(id=str(uuid.uuid4()), name=name)
+            new_amenity = Amenity(name=name)
             db.session.add(new_amenity)
 
     # amenities = [
