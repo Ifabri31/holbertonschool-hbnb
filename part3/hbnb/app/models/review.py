@@ -8,12 +8,16 @@ from sqlalchemy import Column, Integer, ForeignKey
 class Review(BaseModel):
     __tablename__ = 'reviews'
 
-    comment = db.Column(db.String(300), nullable=False)
+    comment = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    user = relationship('User', back_populates='reviews')
-    place_id = Column(Integer, ForeignKey('places.id'), nullable=False)
-    place = relationship('Place', back_populates='reviews')
+    user_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String(36), db.ForeignKey('places.id'), nullable=False)
+
+    # Relación con User
+    user = db.relationship('User', back_populates='reviews')
+
+    # Relación con Place
+    place = db.relationship('Place', back_populates='reviews')
 
     def __init__(self, comment: str, rating: int, user_id: str, place_id: str):
         super().__init__()

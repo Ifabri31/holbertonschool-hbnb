@@ -2,12 +2,11 @@ import bcrypt
 import uuid
 import sqlite3
 
-
-sqliteConnection = sqlite3.connect('development.db')
+sqliteConnection = sqlite3.connect('instance/development.db')
 c = sqliteConnection.cursor()
 
 password = 'admin1234'
-password_hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+password_hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
 user_id = str(uuid.uuid4())
 
@@ -31,7 +30,6 @@ amenity_data = [
 
 c.execute(user_table, user_data)
 c.executemany(amenity_table, amenity_data)
-
 
 sqliteConnection.commit()
 

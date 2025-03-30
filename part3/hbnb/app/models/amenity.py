@@ -5,15 +5,15 @@ from sqlalchemy.orm import validates, relationship
 
 place_amenity = db.Table(
     'place_amenity',
-    Column('place_id', String, ForeignKey('places.id'), primary_key=True),
-    Column('amenity_id', String, ForeignKey('amenities.id'), primary_key=True)
+    db.Column('place_id', db.String(36), db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True)
 )
 
 class Amenity(BaseModel):
     __tablename__ = 'amenities'
 
-    name = db.Column(db.String(50), nullable=False)
-    place = relationship('Place', secondary=place_amenity, back_populates='amenities')
+    name = db.Column(db.String(255), nullable=False)
+    place = db.relationship('Place', secondary=place_amenity, back_populates='amenities')
 
     def __init__(self, name: str):
         super().__init__()

@@ -13,10 +13,10 @@ class Place(BaseModel):
     price = db.Column(db.Float, nullable=False, unique=True)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, default=False)
-    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    owner = relationship('User', back_populates='place') #todo: check
-    reviews = relationship('Review', back_populates='place')
-    amenities = relationship('Amenity', secondary=place_amenity, back_populates='place')
+    owner_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    owner = db.relationship('User', back_populates='place') #todo: check
+    reviews = db.relationship('Review', back_populates='place')
+    amenities = db.relationship('Amenity', secondary=place_amenity, back_populates='place')
 
     def __init__(self, title: str, price: float, latitude: float, longitude: float,  owner_id: str, description=None):
         super().__init__()

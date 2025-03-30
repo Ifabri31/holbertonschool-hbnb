@@ -231,5 +231,12 @@ class TestUserEndpoints(unittest.TestCase):
         reviews = response.get_json()
         self.assertGreaterEqual(len(reviews), 2)  # Ensure there are at least 2 reviews
 
+    def test_login(self):
+        response = self.client.post('/api/v1/auth/login', json={
+            "email": "admin@hbnb.io",
+            "password": "admin1234"
+        })
+        self.assertEqual(response.status_code, 200)
+
 if __name__ == '__main__':
     unittest.main()
