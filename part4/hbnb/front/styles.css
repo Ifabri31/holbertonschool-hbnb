@@ -1,0 +1,95 @@
+/* 
+  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
+  You'll probably need to override some of theese styles.
+*/
+
+
+:root {
+    --primary-color: #BD2A2E;
+    --secundary-color: #740f08;
+    --background-clear-color: #B2BEBF;
+    --background-mid-color: #889C9B;
+    --background-dark-color: #201f1f;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #ddd;
+    height: 1000px;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(to right, var(--secundary-color), var(--primary-color));
+    color: #fff;
+    padding: 1rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 3rem;
+}
+
+main {
+    padding: 3rem;
+}
+
+/* Tarjetas de Place y Reviews */
+.place-card, .review-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+/*--------------Pa probar todo abajo--------------*/
+.place-card h3, .review-card p {
+    margin-bottom: 10px;
+}
+
+/*---Boton para subir reviews---*/
+.place-card button, .review-card button { 
+    background-color: #333;
+    color: #fff;
+    padding: 8px 16pz;
+    border: none;
+    cursor: pointer;
+}
+
+.place-card button:hover, .review-card button:hover {
+    background-color: #555;
+}
+
+
+/* ---Fondos para el body--- */
+.index-page {
+    background-image: url('images/castillo.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-page {
+    background-image: url('images/arbol_ancestral.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.place-page {
+    background-image: url('images/aldea.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.review-page {
+    background-image: url('images/campo_fantasia.png');
+    background-size: cover;
+    background-position: center;
+}
