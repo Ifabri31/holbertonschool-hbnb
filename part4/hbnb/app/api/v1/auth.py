@@ -20,7 +20,6 @@ class Login(Resource):
         print(credentials)
         # Step 1: Retrieve the user based on the provided email
         user = facade.get_user_by_email(credentials['email'])
-        print(user.verify_password("$2b$12$YnnaJWIsNhackaKunsV11.MotJ36nlDbsjmBa5gavhXmFptI5zTdi"))
 
         # Step 2: Check if the user exists and the password is correct
         if not user or not user.verify_password(credentials['password']):

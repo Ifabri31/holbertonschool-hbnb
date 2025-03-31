@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+import validate
 from app.services import facade
 from app.models import place
 
@@ -40,7 +41,7 @@ place_model = api.model('Place', {
 
 @api.route('/')
 class PlaceList(Resource):
-    @api.expect(place_model)
+    @api.expect(place_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     @jwt_required()
@@ -98,7 +99,7 @@ class PlaceResource(Resource):
         
         return {'id': place.id, 
                 'title': place.title,
-                'description': place.description,''
+                'description': place.description,
                 'price': place.price,
                 'latitude': place.latitude, 
                 'longitude': place.longitude,

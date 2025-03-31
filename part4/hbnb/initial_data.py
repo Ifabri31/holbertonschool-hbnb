@@ -7,7 +7,7 @@ app = create_app()
 
 with app.app_context():
     if not os.path.exists('development.db'):
-        with open('../app/persistence/db.sql', 'r') as file:
+        with open('./app/persistence/db.sql', 'r') as file:
             script = file.read()
         try:
             with db.engine.connect() as conn:
@@ -35,11 +35,5 @@ with app.app_context():
         if not amenity:
             new_amenity = Amenity(name=name)
             db.session.add(new_amenity)
-
-    # amenities = [
-    #     Amenity(id=str(uuid.uui4()), name="Wifi"),
-    #     Amenity(id=str(uuid.uuid4()), name="Swimming Pool"),
-    #     Amenity(id=str(uuid.uuid4()), name="Air Conditioning"),
-    # ]
 
     db.session.commit()

@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 const data = await response.json();
-                document.cookie = `token=${data.access_token}; path=/`;
+                localStorage.setItem('token', data.access_token);
+                alert('Login succesfull');
                 window.location.href = 'index.html';
             } else {
                 alert(`Login failed: ${response.statusText}`);
@@ -37,40 +38,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // CHECK AUTHENTICATION
-    checkAuthentication();
-
     function checkAuthentication() {
-        const token = getCookie('token');
-        const loginLink = document.getElementById('login-link');
+        const token = localStorage.getItem('token');
     
-        if (!token) {
-            loginLink.style.display = 'block';
-        } else {
-            loginLink.style.display = 'none';
-            // Fetch places data if the user is authenticated
+        if (token) {
             fetchPlaces(token);
+        } else {
+            window.location.href = 'login.html'
         }
-    }
-    function getCookie(name) {
-        // Function to get a cookie value by its name
-        const cookies = document.cookie.split('; ');
-        for (let cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.split('=');
-            if (cookieName === name) {
-                return cookieValue
-            }
-        }
-        return null;
     }
 
     // GET ALL PLACES
     async function fetchPlaces(token) {
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/v1/places', {
+            const response = await fetch('http://127.0.0.1:5000/api/v1/places/', {
+
                 method: 'GET',
+                mode: "cors", // Asegura que es una solicitud CORS
                 headers: {
-                    'Authorization': `${token}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -81,43 +68,60 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(`Error fetching places; ${response.statusText}`);
             }
         } catch (error) {
-            console.error(`Error fetching places: ${error}`);
+            console.error(`Error fetching puto places: ${error}`);
         }
     }
 
     function displayPlaces(places) {
-        const placeList = document.getElementById('placed-list').value;
+        const placeList = document.getElementById('places-list');
         placeList.innerHTML = '';
 
-        places.array.forEach(place => {
-            const placeDiv = document.createElement('div');
-            placeDiv.classList.add('place-card');
-            placeDiv.innerHTML = `
-                <h3 class="place-title">${place.name}</h3>
+        places.forEach(place => {
+            const placeArt = document.createElement('article');
+            placeArt.setAttribute('data-place-price', place.price);
+            placeArt.classList.add('place-card');
+            placeArt.innerHTML = `
+                <h3 class="place-title">${place.title}</h3>
                 <p class="place-parg">Price per night: $${place.price}</p>
                 <p class="place-parg">Location: X${place.longitude} Y${place.latitude}</p>
                 <button class="details-button">View Details</button>
             `;
-            placeList.appendChild(placeDiv);
+            placeList.appendChild(placeArt);
         });
     }
+
+
 
     // PRICE FILTER DROPDOWN
     document.getElementById('price-filter').addEventListener('change', (event) => {
         event.preventDefault();
 
         const places_list = document.getElementById('places-list');
-        const select = document.getElementById('price-filter');
-        const places = document.querySelectorAll(places_list);
+        const places = places_list.querySelectorAll('.place-card');
 
-        for (let place of places) {
-            if (place.price < event.target.value) {
-                event.target.value = "flex";
+        places.forEach(place => {
+            console.log(place);
+            
+            const price = parseFloat(place.getAttribute('data-place-price'));
+
+            console.log(event.target.value);
+            console.log(price);
+            
+
+            if (event.target.value === 'All' || price <= parseFloat(event.target.value)) {
+                console.log()
+                place.style.display = 'block';
             } else {
-                event.target.value = "none"
+                place.style.display = 'none';
             }
-        }
+        });
+
+        checkAuthentication();
+
     });
+
+    // DISPLAY DETAILS INFORMATION OF A PLACE
+
 
     // FONDOS ALTERNOS
     // const backgrounds = [

@@ -13,7 +13,7 @@ db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, supports_credentials=True)
     app.config.from_object(config_class)
 
     @jwt.user_lookup_loader
