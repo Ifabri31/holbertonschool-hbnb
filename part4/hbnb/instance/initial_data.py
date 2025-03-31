@@ -1,14 +1,13 @@
 from sqlalchemy import text
 from app import create_app, db
 from app.models import User, Amenity
-import uuid
 import os
 
 app = create_app()
 
 with app.app_context():
     if not os.path.exists('development.db'):
-        with open('app/persistence/db.sql', 'r') as file:
+        with open('../app/persistence/db.sql', 'r') as file:
             script = file.read()
         try:
             with db.engine.connect() as conn:
