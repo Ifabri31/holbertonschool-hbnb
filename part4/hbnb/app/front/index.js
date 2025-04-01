@@ -1,42 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // LOGIN SECTION
-    const loginForm = document.getElementById('login-form');
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            await loginUser(email, password);
-        });
-    }
-
-    async function loginUser(email, password) {
-        try {
-            const response = await fetch('http://127.0.0.1:5000/api/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, password })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.access_token);
-                alert('Login succesfull');
-                window.location.href = 'index.html';
-            } else {
-                alert(`Login failed: ${response.statusText}`);
-            }
-        } catch (error) {
-            console.error('Error during login:', error);
-        }
-    }
-
     // CHECK AUTHENTICATION
     function checkAuthentication() {
         const token = localStorage.getItem('token');
@@ -46,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             window.location.href = 'login.html'
         }
-    }
+    };
 
     // GET ALL PLACES
     async function fetchPlaces(token) {
@@ -54,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('http://127.0.0.1:5000/api/v1/places/', {
 
                 method: 'GET',
-                mode: "cors", // Asegura que es una solicitud CORS
+                mode: "cors",
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -65,13 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
                 displayPlaces(data);
             } else {
-                console.error(`Error fetching places; ${response.statusText}`);
+                console.error(`Error displaying the places; ${response.statusText}`);
             }
         } catch (error) {
-            console.error(`Error fetching puto places: ${error}`);
+            console.error(`Error fetching the places: ${error}`);
         }
-    }
+    };
 
+    // SHOW THE PLACES WITH THE NEXT FORMAT:
     function displayPlaces(places) {
         const placeList = document.getElementById('places-list');
         placeList.innerHTML = '';
@@ -88,9 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             placeList.appendChild(placeArt);
         });
-    }
-
-
+    };
 
     // PRICE FILTER DROPDOWN
     document.getElementById('price-filter').addEventListener('change', (event) => {
@@ -100,7 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const places = places_list.querySelectorAll('.place-card');
 
         places.forEach(place => {
-            console.log(place);
             
             const price = parseFloat(place.getAttribute('data-place-price'));
 
@@ -115,29 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 place.style.display = 'none';
             }
         });
-
-        checkAuthentication();
-
     });
 
-    // DISPLAY DETAILS INFORMATION OF A PLACE
-
-
-    // FONDOS ALTERNOS
-    // const backgrounds = [
-    //     "images/aldea.png",
-    //     "images/arbol_ancestral.png",
-    //     "images/campo_fantasia.png",
-    //     "images/castillo.png",
-    //     "images/city.png",
-    //     "images/molino.png"
-    // ];
-
-    // const randomImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-
-
-    // document.body.style.backgroundImage = `url('${randomImage}')`;
-    // document.body.style.backgroundSize = "cover";
-    // document.body.style.backgroundPosition = "center";
-
+    checkAuthentication();
 });
