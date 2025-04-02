@@ -37,5 +37,4 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error during login:', error);
         }
     }
-
 });

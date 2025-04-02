@@ -40,6 +40,8 @@ class ReviewList(Resource):
         for _ in all_reviews:
             if _.place_id == review_data["place_id"]:
                 return {'error': 'You have already reviewed this place'}, 400
+        
+        review_data['user_id'] = current_user.id
 
         try:
             new_review = facade.create_review(review_data)

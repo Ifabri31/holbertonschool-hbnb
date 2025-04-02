@@ -47,14 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
             placeArt.innerHTML = `
                 <h3 class="place-title">${place.title}</h3>
                 <p class="place-parg">Price per night: $${place.price}</p>
-                <p class="place-parg">Location: X${place.longitude} Y${place.latitude}</p>
-                <button class="details-button">View Details</button>
+                <p class="place-parg">Location: X:${place.longitude} Y:${place.latitude}</p>
+                <button class="details-button" data-place-id="${place.id}">View Details</button>
             `;
-            placeList.appendChild(placeArt);
+            placeList.appendChild(placeArt);    
+
+            // GO TO DETAILLS PAGE BUTTON #todo: cuidado, capas que explota
+            placeList.addEventListener('click', (event) => {
+                if (event.target.classList.contains('details-button')) {
+                    const placeId = event.target.getAttribute('data-place-id');
+                    window.location.href = `place.html?place_id=${placeId}`;
+                }
+            });
         });
     };
 
-    // PRICE FILTER DROPDOWN
+    // PRICE FILTER DROPDOWN BUTTON
     document.getElementById('price-filter').addEventListener('change', (event) => {
         event.preventDefault();
 
@@ -65,10 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const price = parseFloat(place.getAttribute('data-place-price'));
 
-            console.log(event.target.value);
-            console.log(price);
-            
-
             if (event.target.value === 'All' || price <= parseFloat(event.target.value)) {
                 console.log()
                 place.style.display = 'block';
@@ -77,6 +81,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
     checkAuthentication();
 });

@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // EXTRACT THE ID FROM THE URL
-    let placeID;
+    let placeId;
     try {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams) {
-            placeID = urlParams.get('place_id');
+            placeId = urlParams.get('place_id');
         } else {
             console.error(`The place ID not found`);
         }
     } catch (error) {
         console.error(`Error to try extract the placeID from the URL: ${error}`);
-    }
+    };
 
     // CHECK AUTHENTICATION
     function checkAuthentication() {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addReviewSection.style.display = 'none';
         } else {
             addReviewSection.style.display = 'block';
-            fetchPlaceDetails(token, placeID)
+            fetchPlaceDetails(token, placeId)
         }
     };
 
@@ -60,14 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
         let reviewsHTML = '<h4 class="place-review">REVIEWS</h4>';
     
         if (place.reviews && place.reviews.length > 0) {
-            reviewsHTML += '<dl class="review-block">';
+            reviewsHTML += '<ul class="review-block">';
             place.reviews.forEach(review => {
                 reviewsHTML += `
-                    <dt>Rating: ${review.rating}</dt>
-                    <dd>${review.comment}</dd>
+                    <li>${review.rating}</li>
+                    <li>${review.comment}</li>
                 `;
             });
-            reviewsHTML += '</dl>';
+            reviewsHTML += '</ul>';
         } else {
             reviewsHTML += '<p>No reviews yet.</p>';
         }
