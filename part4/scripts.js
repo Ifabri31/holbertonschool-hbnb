@@ -4,13 +4,23 @@ let review_data;
 const checkAuthentication = () => {
   const token = getCookie('token');
   const loginLink = document.getElementById('login-link');
+  const logoutLink = document.getElementById('logout-link');
 
   if (!token) {
-    loginLink.style.display = 'block';
-    window.href = 'index.html';
+    // Usuario no autenticado
+    if (loginLink) loginLink.style.display = 'block';
+    if (logoutLink) logoutLink.style.display = 'none';
   } else {
-    loginLink.style.display = 'none';
-    fetchPlaces(token);
+    // Usuario autenticado
+    if (loginLink) loginLink.style.display = 'none';
+    if (logoutLink) {
+      logoutLink.style.display = 'block';
+      logoutLink.addEventListener('click', (e) => {
+        e.preventDefault(); // Evita el comportamiento predeterminado del enlace
+        logout();
+      });
+    }
+    fetchPlaces(token); // Cargar los lugares solo si el usuario está autenticado
   }
 };
 
@@ -95,6 +105,7 @@ const LoginFunct = (logbtn) => {
     if (EMAIL.length >= 10 && PASSWORD.length >= 5) {
       const postopts = {
         method: 'POST',
+        mode: 'cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: EMAIL, password: PASSWORD })
       };
@@ -195,6 +206,13 @@ const show_place = (place_info) => {
   `;
 
   PLACE_DETAILS.innerHTML = htmlContentToAppend;
+};
+
+const logout = () => {
+  // Eliminar la cookie del token
+  document.cookie = "token=; path=/;";
+  // Redirigir al usuario a la página de inicio de sesión
+  window.location.href = 'login.html';
 };
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -3,8 +3,9 @@ from flask_restx import Api
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
-from flask_jwt_extended import set_access_cookies
-from flask_jwt_extended import unset_jwt_cookies
+from flask_cors import CORS
+# from flask_jwt_extended import set_access_cookies
+# from flask_jwt_extended import unset_jwt_cookies
 
 bcrypt = Bcrypt()
 jwt = JWTManager()
@@ -12,6 +13,7 @@ db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
+    CORS(app)
     app.config.from_object(config_class)
 
     @jwt.user_lookup_loader
