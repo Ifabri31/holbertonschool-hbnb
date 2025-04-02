@@ -11,6 +11,15 @@
     font-family: Arial, sans-serif;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Asegurar que el ancho no exceda el viewport */
+    min-height: 100%; /* Asegurar que el alto mínimo sea el viewport */
+    overflow-x: hidden; /* Evitar el scroll horizontal */
+    background-color: #f4f4f4; /* Fondo uniforme */
+}
+
 body {
     background-color: #f4f4f4;
     color: #333;
@@ -50,17 +59,19 @@ nav a:hover {
 
 /* Footer */
 footer {
-    position: fixed;
+    position: relative; /* Cambiar de fixed a relative si no quieres que se quede fijo */
     bottom: 0;
+    width: 100%; /* Asegurar que ocupe todo el ancho */
     background-color: #f59e3b;
     color: #fff;
-    width: 100vw;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
     height: 10vh;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    padding: 10px;
 }
 
 /* Forms */
@@ -112,7 +123,10 @@ button:hover {
 
 main {
     padding: 2rem;
-    width: 100vw;
+    width: 100%; /* Asegurar que el ancho no exceda el viewport */
+    max-width: 1200px; /* Limitar el ancho máximo del contenido */
+    margin: 0 auto; /* Centrar el contenido */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
 }
 
 h1{
