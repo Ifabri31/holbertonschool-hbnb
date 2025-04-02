@@ -20,39 +20,46 @@
 }
 
 body {
+    display: flex; 
+    flex-direction: column;
     background-color: #ddd;
-    height: 1000px;
     color: #333;
 }
 
 header {
     background: linear-gradient(to right, var(--secundary-color), var(--primary-color));
     color: #fff;
-    padding: 1rem;
+    padding: .5rem;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
-    margin-left: 3rem;
+    margin-right: 3rem;
 }
 
 main {
     padding: 3rem;
 }
 
-/* Tarjetas de Place y Reviews */
-.place-card, .review-card {
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: #fff;
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background: linear-gradient(to right, var(--secundary-color), var(--primary-color));
+    height: 70px;
+    /* position: relative; top: 330px; */
 }
 
-/*--------------Pa probar todo abajo--------------*/
-.place-card h3, .review-card p {
-    margin-bottom: 10px;
+/* Tarjetas de Place y Reviews */
+.place-card {
+    margin: 20px;
+    padding: 10px;
+    background-image: linear-gradient(90deg, rgba(255,255,255,1) 15%, rgba(255,0,120,0) 90%);
+    /* border: 1px solid #f0e3e3; */
+    border-radius: 10px;
+    /* background-color: #fff; */
 }
 
 /*---Boton para subir reviews---*/
@@ -65,7 +72,7 @@ main {
 }
 
 .place-card button:hover, .review-card button:hover {
-    background-color: #555;
+    background-color: #c23737;
 }
 
 

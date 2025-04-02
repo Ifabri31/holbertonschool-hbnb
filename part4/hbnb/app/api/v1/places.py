@@ -1,8 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
-import validate
 from app.services import facade
-from app.models import place
 
 api = Namespace('places', description='Place operations')
 
@@ -10,21 +8,21 @@ api = Namespace('places', description='Place operations')
 amenity_model = api.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(description='Name of the amenity')
-})
+}, strict=True)
 
 user_model = api.model('PlaceUser', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(description='First name of the owner'),
     'last_name': fields.String(description='Last name of the owner'),
     'email': fields.String(description='Email of the owner')
-})
+}, strict=True)
 
 review_model = api.model('PlaceReview', {
     'id': fields.String(description='Review ID'),
     'text': fields.String(description='Text of the review'),
     'rating': fields.Integer(description='Rating of the place (1-5)'),
     'user_id': fields.String(description='ID of the user')
-})
+}, strict=True)
 
 # Define the place model for input validation and documentation
 place_model = api.model('Place', {
@@ -37,7 +35,7 @@ place_model = api.model('Place', {
     'owner': fields.Nested(user_model, description='Owner of the place'),
     'amenities': fields.List(fields.Nested(amenity_model), description='List of amenities'),
     'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
-})
+}, strict=True)
 
 @api.route('/')
 class PlaceList(Resource):
@@ -111,6 +109,8 @@ class PlaceResource(Resource):
                 }, 
                 'reviews': [{
                     'id': review['id'],
+                    'first_name': facade.get_user(review['user_id']).first_name,
+                    'last_name': facade.get_user(review['user_id']).last_name,
                     'comment': review['comment'],
                     'rating': review['rating']
                 } for review in all_reviews if review['place_id'] == place_id],

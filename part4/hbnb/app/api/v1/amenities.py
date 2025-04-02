@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from sqlalchemy import true
 from app.services import facade
 from flask_jwt_extended import jwt_required, current_user
 
@@ -7,7 +8,7 @@ api = Namespace('amenities', description='Amenity operations')
 # Define the amenity model for input validation and documentation
 amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
-})
+}, strict=True)
 
 @api.route('/')
 class AmenityList(Resource):

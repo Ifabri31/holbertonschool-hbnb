@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token, jwt_required, current_user
+from sqlalchemy import true
 from app import bcrypt
 from app.services import facade
 
@@ -9,7 +10,7 @@ api = Namespace('auth', description='Authentication operations')
 login_model = api.model('Login', {
     'email': fields.String(required=True, description='User email'),
     'password': fields.String(required=True, description='User password')
-})
+}, strict=True)
 
 @api.route('/login')
 class Login(Resource):

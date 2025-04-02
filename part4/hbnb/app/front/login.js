@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 localStorage.setItem('token', data.access_token);
+                localStorage.setItem('username', email);
                 alert('Login succesfull');
                 window.location.href = 'index.html';
             } else {
@@ -38,3 +39,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// FONDOS ALTERNOS
+const backgrounds = [
+    "images/aldea.png",
+    "images/arbol_ancestral.png",
+    "images/campo_fantasia.png",
+    "images/castillo.png",
+    "images/city.png",
+    "images/molino.png"
+];
+
+const randomImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+
+document.body.style.backgroundImage = `url('${randomImage}')`;
+document.body.style.backgroundSize = "cover";
+document.body.style.backgroundPosition = "center";

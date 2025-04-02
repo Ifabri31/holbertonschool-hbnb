@@ -1,6 +1,6 @@
-from tokenize import Comment
 from flask_restx import Namespace, Resource, fields, marshal
 from flask_jwt_extended import jwt_required, get_jwt_identity, current_user
+from sqlalchemy import true
 from app.services import facade
 
 api = Namespace('reviews', description='Review operations')
@@ -11,14 +11,14 @@ review_model = api.model('Review', {
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
     'user_id': fields.String(required=True, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
-})
+}, strict=True)
 
 # Define output by review_by_place
 review_by_place_model = api.model('ReviewbyPlace', {
     'id': fields.String(description='Id by review'),
     'comment': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)')
-})
+}, strict=true)
 
 @api.route('/reviews')
 class ReviewList(Resource):
@@ -32,7 +32,7 @@ class ReviewList(Resource):
             return {'error': 'Unauthorized access'}, 401
         
         review_data = api.payload
-        place = facade.get_place(review_data["place_id"])
+        place = facade.get_place(review_data['place_id'])#review_data['place_id']
         if place.owner_id == current_user.id:
             return {'error': 'You cannot review your own place'}, 400
         
@@ -44,6 +44,7 @@ class ReviewList(Resource):
         review_data['user_id'] = current_user.id
 
         try:
+            review_data["rating"] = int(review_data["rating"])
             new_review = facade.create_review(review_data)
         except ValueError:
             return {'error': 'Invalid input data'}, 400
