@@ -131,5 +131,8 @@ class PlaceReviewList(Resource):
             return {'error': 'Place not found'}, 404
         marsh_reviews = []
         for review in reviews_list:
+            # facade.get_user(i.user_id).first_name
+            print(type(review))
             marsh_reviews.append(marshal(review, review_by_place_model))
+        
         return marsh_reviews, 200

@@ -205,17 +205,40 @@ form button {
     gap: 20px;
 }
 
-.review-box{
-    align-items: flex-start;
+/* Contenedor de reseñas */
+#reviews {
+    display: grid; /* Usar diseño de grid */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajustar columnas dinámicamente */
+    gap: 20px; /* Espaciado entre las cajas */
+    padding: 20px;
+    justify-content: center; /* Centrar las reseñas */
+    width: 100%; /* Asegurar que el contenedor ocupe todo el ancho */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
 }
 
-.review-box p, .review-box strong{
-    margin-left: 25px;
-}
-
-.review-box div{
+/* Cajas de reseñas */
+.review-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: left;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    justify-content: space-between;
+    min-width: 250px; /* Ancho mínimo para mantener legibilidad */
+    max-width: 100%; /* Evitar que las cajas excedan el ancho disponible */
+    box-sizing: border-box; /* Incluir padding y border en el ancho total */
+}
+
+/* Ajustar el texto dentro de las reseñas */
+.review-box p {
+    margin: 5px 0;
+}
+
+.review-box strong {
+    margin-bottom: 10px;
 }
 
 #review-form{
@@ -235,4 +258,11 @@ form button {
 textarea{
     max-width: 15vw;
     max-height: 10vh;
+}
+
+/* Estilizar las estrellas */
+.stars {
+    color: #f59e3b; /* Color de las estrellas llenas */
+    font-size: 1.5rem;
+    letter-spacing: 2px; /* Espaciado entre estrellas */
 }
