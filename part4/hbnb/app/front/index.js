@@ -13,6 +13,7 @@ function checkAuthentication() {
     } else {
         loginLink.style.display = 'inlink';
         logoutLink.style.display = 'none';
+        window.location.href = 'login.html';
     }
 };
 
@@ -23,7 +24,7 @@ logOut.addEventListener('click', (event) => {
 
     localStorage.clear()
     window.location.href = 'login.html';
-})
+});
 
 // GET ALL PLACES
 async function fetchPlaces(token) {
@@ -59,18 +60,24 @@ function displayPlaces(places) {
         placeArt.setAttribute('data-place-price', place.price);
         placeArt.classList.add('place-card');
         placeArt.innerHTML = `
-            <h3 class="place-title">${place.title}</h3>
-            <p class="place-parg">Price per night: $${place.price}</p>
-            <p class="place-parg">Location: X:${place.longitude} Y:${place.latitude}</p>
+            <h2 class="place-title"><strong>${place.title}</strong></h2>
+            <br>
+            <p class="place-parg"><strong>Price per night: $${place.price}</strong></p>
+            <p class="place-parg"><strong>Location: X:${place.longitude} Y:${place.latitude}</strong></p>
+            <br>
             <button class="details-button" data-place-id="${place.id}">View Details</button>
         `;
         placeList.appendChild(placeArt);    
 
         // GO TO DETAILLS PAGE BUTTON #todo: cuidado, capas que explota
         placeList.addEventListener('click', (event) => {
-            if (event.target.classList.contains('details-button')) {
-                const placeId = event.target.getAttribute('data-place-id');
-                window.location.href = `place.html?place_id=${placeId}`;
+            try {
+                if (event.target.classList.contains('details-button')) {
+                    const placeId = event.target.getAttribute('data-place-id');
+                    window.location.href = `place.html?place_id=${placeId}`;
+                }
+            } catch (error) {
+                console.error('No se puede');
             }
         });
     });
@@ -98,12 +105,21 @@ document.getElementById('price-filter').addEventListener('change', (event) => {
 
 // FONDOS ALTERNOS
 const backgrounds = [
-    "images/aldea.png",
-    "images/arbol_ancestral.png",
-    "images/campo_fantasia.png",
-    "images/castillo.png",
-    "images/city.png",
-    "images/molino.png"
+    "images/backgraunds/aldea.png",
+    "images/backgraunds/arbol_ancestral.png",
+    "images/backgraunds/atlantis.png",
+    "images/backgraunds/campo_fantasia.png",
+    "images/backgraunds/castillo.png",
+    "images/backgraunds/city.png",
+    "images/backgraunds/ciudad_fantasia.png",
+    "images/backgraunds/cyber_city.png",
+    "images/backgraunds/japon_pueblo.jpg",
+    "images/backgraunds/japon_pueblo2.png",
+    "images/backgraunds/laguito.png",
+    "images/backgraunds/lluvia.png",
+    "images/backgraunds/molino.png",
+    "images/backgraunds/punkmodern.png",
+    "images/backgraunds/work_ofice.png"
 ];
 
 const randomImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];

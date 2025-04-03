@@ -73,12 +73,27 @@ function displayPlaceDetails(place) {
     let reviewsHTML = '<h4 class="place-review">REVIEWS</h4><br>';
 
     if (place.reviews && place.reviews.length > 0) {
-        reviewsHTML += '<dl class="review-block">';
+        reviewsHTML += '<dl class="review-container">';
         place.reviews.forEach(review => {
+
+            const renderStars = (rating) => {
+                let stars = '';
+                for (let i = 0; i < rating; i++) {
+                    stars += '★';
+                }
+                for (let i = rating; i < 5; i++) {
+                    stars += '☆';
+                }
+                return stars;
+            };
+
             reviewsHTML += `
+                <div class="individual-review">
                 <dt>${review.first_name} ${review.last_name}</dt>
-                <dt>${review.rating}</dt>
-                <dt>${review.comment}</dt>
+                <dd>${renderStars(review.rating)}</dd>
+                <dd>${review.comment}</dd>
+                </div>
+                <br>
             `;
         });
         reviewsHTML += '</dl>';
@@ -87,12 +102,14 @@ function displayPlaceDetails(place) {
     }
 
     placeArt.innerHTML = `
+        <div class="place-block">
         <h3 class="place-title">${place.title}</h3>
-        ${place.description ? `<p class="place-parg">Description: ${place.description}</p>` : ''}
-        <p class="place-parg">Owner: ${place.owner.first_name} ${place.owner.last_name}</p>
-        <p class="place-parg">Price per night: $${place.price}</p>
-        <p class="place-parg">Location: X${place.longitude} Y${place.latitude}</p>
-        <p class="place-parg">Amenities: ${place.amenities}</p>
+        ${place.description ? `<p class="place-parg"><strong>Description:</strong> ${place.description}</p>` : ''}
+        <p class="place-parg"><strong>Owner:</strong> ${place.owner.first_name} ${place.owner.last_name}</p>
+        <p class="place-parg"><strong>Price per night:</strong> $${place.price}</p>
+        <p class="place-parg"><strong>Location:</strong> X${place.longitude} Y${place.latitude}</p>
+        <p class="place-parg"><strong>Amenities:</strong> ${place.amenities}</p>
+        </div>
         <br>
         ${reviewsHTML}
     `;
@@ -139,12 +156,21 @@ async function submitReview(token, comment, rating, placeId) {
 
 // FONDOS ALTERNOS
 const backgrounds = [
-    "images/aldea.png",
-    "images/arbol_ancestral.png",
-    "images/campo_fantasia.png",
-    "images/castillo.png",
-    "images/city.png",
-    "images/molino.png"
+    "images/backgraunds/aldea.png",
+    "images/backgraunds/arbol_ancestral.png",
+    "images/backgraunds/atlantis.png",
+    "images/backgraunds/campo_fantasia.png",
+    "images/backgraunds/castillo.png",
+    "images/backgraunds/city.png",
+    "images/backgraunds/ciudad_fantasia.png",
+    "images/backgraunds/cyber_city.png",
+    "images/backgraunds/japon_pueblo.jpg",
+    "images/backgraunds/japon_pueblo2.png",
+    "images/backgraunds/laguito.png",
+    "images/backgraunds/lluvia.png",
+    "images/backgraunds/molino.png",
+    "images/backgraunds/punkmodern.png",
+    "images/backgraunds/work_ofice.png"
 ];
 
 const randomImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];

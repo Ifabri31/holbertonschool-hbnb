@@ -42,12 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // FONDOS ALTERNOS
 const backgrounds = [
-    "images/aldea.png",
-    "images/arbol_ancestral.png",
-    "images/campo_fantasia.png",
-    "images/castillo.png",
-    "images/city.png",
-    "images/molino.png"
+    "images/backgraunds/aldea.png",
+    "images/backgraunds/arbol_ancestral.png",
+    "images/backgraunds/atlantis.png",
+    "images/backgraunds/campo_fantasia.png",
+    "images/backgraunds/castillo.png",
+    "images/backgraunds/city.png",
+    "images/backgraunds/ciudad_fantasia.png",
+    "images/backgraunds/cyber_city.png",
+    "images/backgraunds/japon_pueblo.jpg",
+    "images/backgraunds/japon_pueblo2.png",
+    "images/backgraunds/laguito.png",
+    "images/backgraunds/lluvia.png",
+    "images/backgraunds/molino.png",
+    "images/backgraunds/punkmodern.png",
+    "images/backgraunds/work_ofice.png"
 ];
 
 const randomImage = backgrounds[Math.floor(Math.random() * backgrounds.length)];

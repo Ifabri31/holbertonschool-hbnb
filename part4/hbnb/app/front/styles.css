@@ -5,11 +5,11 @@
 
 
 :root {
-    --primary-color: #BD2A2E;
-    --secundary-color: #740f08;
-    --background-clear-color: #B2BEBF;
-    --background-mid-color: #889C9B;
-    --background-dark-color: #201f1f;
+    --primary-color: #f7eded;
+    --secundary-color: #0d0201;
+    --background-clear-color: #ff0030;
+    --background-mid-color: #a20926;
+    --background-dark-color: #570025;
 }
 
 * {
@@ -22,24 +22,65 @@
 body {
     display: flex; 
     flex-direction: column;
+    min-height: 100vh;
     background-color: #ddd;
     color: #333;
 }
 
 header {
-    background: linear-gradient(to right, var(--secundary-color), var(--primary-color));
+    position: relative;
+    background: linear-gradient(180deg, rgba(87,0,37,1) 14%, rgba(162,9,38,0.8883928571428571) 61%, rgba(255,0,48,0.07886904761904767) 100%);
     color: #fff;
-    padding: .5rem;
+    padding: 1rem;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 1rem; /* Añade un poco de espacio a los lados del nav */
+}
+
+header nav .buttons-link {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-weight: bold;
+}
+
+header nav .logo-header {
+    display: flex;
+    align-items: center;
+}
+
+header nav .logo-header img.logo {
+    height: 50px;
+    margin-right: 1rem; 
+}
+
+header nav .buttons-link a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 2rem;
 }
 
 nav a {
     color: #fff;
     text-decoration: none;
-    margin-right: 3rem;
+    margin-right: 2rem;
 }
 
 main {
     padding: 3rem;
+    flex-grow: 1;
+}
+
+body.login-page main {
+    display: flex;
+    justify-content: flex-end; 
+    align-items: center; 
+    padding: 3rem; 
+    flex-grow: 1;
 }
 
 footer {
@@ -47,56 +88,258 @@ footer {
     align-items: center;
     justify-content: center;
     color: #fff;
-    background: linear-gradient(to right, var(--secundary-color), var(--primary-color));
-    height: 70px;
-    /* position: relative; top: 330px; */
+    background: linear-gradient(90deg, rgba(87,0,37,1) 14%, rgba(162,9,38,1) 61%, rgba(255,0,48,1) 100%);
+    padding: 1rem;
 }
 
-/* Tarjetas de Place y Reviews */
+/* Tarjetas de Place*/
 .place-card {
     margin: 20px;
-    padding: 10px;
-    background-image: linear-gradient(90deg, rgba(255,255,255,1) 15%, rgba(255,0,120,0) 90%);
-    /* border: 1px solid #f0e3e3; */
+    padding: 30px;
+    background-image: linear-gradient(90deg, var(--primary-color) 10%, rgba(255, 255, 255, 0) 80%);
     border-radius: 10px;
-    /* background-color: #fff; */
 }
 
-/*---Boton para subir reviews---*/
+/*---Boton para subir reviews y ver detalles---*/
 .place-card button, .review-card button { 
-    background-color: #333;
+    background: linear-gradient(90deg, rgba(87,0,37,1) 14%, rgba(162,9,38,1) 61%, rgba(255,0,48,1) 100%);
     color: #fff;
-    padding: 8px 16pz;
+    padding: .5rem;
     border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-weight: bold;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 10);
+}
+
+.place-card button:hover {
+    background: linear-gradient(90deg, var(--background-mid-color) 14%, var(--background-clear-color) 61%, var(--background-dark-color) 100%);
+}
+
+.review-card button:hover {
+    background: linear-gradient(90deg, var(--background-mid-color) 14%, var(--background-clear-color) 61%, var(--background-dark-color) 100%);
+}
+
+/* ---Boton de filtrar precios--- */
+#filter {
+    margin: 20px;
+    padding: 30px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(87,0,37,1) 14%, rgba(162,9,38,1) 61%, rgba(255,0,48,1) 100%);
+    display: inline-block;
+    color: var(--primary-color);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 10);
+}
+
+/* ---hover de index--- */
+/* .place-card:hover, .review-card:hover {
+    background-image: linear-gradient(270deg, var(--primary-color) 10%, rgba(255, 255, 255, 0) 80%);
+    transition: all 1s ease;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+} */
+
+.button-link {
+    position: absolute;
+    right: 0;
+}
+
+/* --- Informacion del Place --- */
+.place-block {
+    margin: 20px;
+    padding: 25px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);   
+    line-height: 1.6;
+}
+
+.place-title {
+    color: var(--background-mid-color); 
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+
+    background-image: linear-gradient(90deg, var(--background-dark-color) 0%, var(--background-mid-color) 50%, rgba(162, 9, 38, 0) 80%);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    background-size: 100% 2px;
+}
+
+.place-parg {
+    color: var(--secundary-color);
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+.place-parg strong {
+    font-weight: bold;
+    color: var(--background-dark-color);
+}
+
+/* --- Prueba trucha para las review(hice trampa estoy cansado xd) --- */
+.place-review {
+    color: var(--background-mid-color);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--background-clear-color);
+    padding-bottom: 10px;
+}
+
+.review-container {
+    padding: 0;
+    margin-bottom: 20px; 
+}
+
+.individual-review {
+    padding: 15px;
+    background-color: #e1d6d6;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    margin-bottom: 10px;
+    border-left: 5px solid var(--background-clear-color);
+}
+
+.individual-review dt {
+    font-weight: bold;
+    color: var(--background-dark-color);
+    margin-bottom: 5px;
+}
+
+.individual-review dd:first-of-type {
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    color: rgb(232, 192, 47);
+}
+
+.individual-review dd:last-of-type {
+    color: var(--secundary-color);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.individual-review br {
+    display: none;
+}
+
+.review-container p {
+    color: var(--secundary-color);
+    font-style: italic;
+}
+
+/* ------------------------- */
+
+.place-review {
+    margin: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(87,0,37,1) 14%, rgba(162,9,38,1) 61%, rgba(255,0,48,1) 100%);
+    display: inline-block;
+    color: var(--primary-color);
+}
+
+/* --- Caja de comentarios --- */
+.review-card {
+    margin: 20px;
+    padding: 30px;
+    background-color: var(--primary-color);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.add-review {
+    display: grid;
+    grid-template-columns: 1fr; 
+    gap: 15px; 
+}
+
+.add-review label {
+    font-weight: bold;
+    color: var(--secundary-color);
+}
+
+.add-review textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.add-review select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-.place-card button:hover, .review-card button:hover {
-    background-color: #c23737;
+.add-review button[type="submit"] {
+    background: linear-gradient(90deg, var(--background-dark-color) 14%, var(--background-mid-color) 61%, var(--background-clear-color) 100%);
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    width: fit-content;
+    margin: 0 auto;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
-
-/* ---Fondos para el body--- */
-.index-page {
-    background-image: url('images/castillo.png');
-    background-size: cover;
-    background-position: center;
+.add-review button[type="submit"]:hover {
+    background: linear-gradient(90deg, var(--background-mid-color) 14%, var(--background-clear-color) 61%, var(--background-dark-color) 100%);
 }
 
-.login-page {
-    background-image: url('images/arbol_ancestral.png');
-    background-size: cover;
-    background-position: center;
+/* --- Login page --- */
+.login-section {
+    background: linear-gradient(90deg, rgba(87,0,37,1) 14%, rgba(162,9,38,1) 61%, rgba(255,0,48,1) 100%);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 10);
+    width: 400px;
+    margin-left: auto;
 }
 
-.place-page {
-    background-image: url('images/aldea.png');
-    background-size: cover;
-    background-position: center;
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-.review-page {
-    background-image: url('images/campo_fantasia.png');
-    background-size: cover;
-    background-position: center;
+#login-form h2 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#login-form label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+#login-form input[type="email"],
+#login-form input[type="password"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+#login-form button[type="submit"] {
+    background-color: var(--primary-color);
+    color: var(--secundary-color);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    width: fit-content;
+    margin: 0 auto;
+    transition: background-color 0.5s ease;
+}
+
+#login-form button[type="submit"]:hover {
+    background: linear-gradient(90deg, var(--background-mid-color) 14%, var(--background-clear-color) 61%, var(--background-dark-color) 100%);
 }
