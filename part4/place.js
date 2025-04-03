@@ -106,3 +106,72 @@ const show_review = (review_info) => {
 
     REVIEW_SECTION.innerHTML = htmlContent;
 };
+
+// Enviar la reseña al backend
+const submitReview = async (token, placeId, reviewText, rating) => {
+    const reviewData = {
+        comment: reviewText,
+        rating: parseInt(rating, 10),
+        place_id: placeId
+    };
+
+    try {
+        const response = await fetch('http://localhost:5000/api/v1/reviews', {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(reviewData)
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error desconocido');
+        }
+
+        alert('¡Reseña enviada con éxito!');
+        document.getElementById('review-form').reset();
+
+        // Recargar las reseñas después de enviar
+        getPlaceData(token, placeId);
+    } catch (error) {
+        console.error('Error al enviar la reseña:', error);
+        alert(`Ocurrió un error al enviar la reseña: ${error.message}`);
+    }
+};
+
+// Configurar el evento para el formulario de reseñas
+document.addEventListener('DOMContentLoaded', () => {
+    const token = checkAuthentication();
+    const placeId = sessionStorage.getItem('place_id');
+
+    const reviewForm = document.getElementById('review-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const reviewText = document.getElementById('review').value;
+            const rating = document.getElementById('rating').value;
+
+            if (reviewText && rating && placeId && token) {
+                await submitReview(token, placeId, reviewText, rating);
+            } else {
+                alert('Por favor, completa todos los campos y asegúrate de estar autenticado.');
+            }
+        });
+    }
+});
+
+// Configurar el evento para el botón de logout
+document.addEventListener('DOMContentLoaded', () => {
+    const logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        });
+    }
+});
