@@ -18,6 +18,9 @@ html, body {
     min-height: 100%; /* Asegurar que el alto mínimo sea el viewport */
     overflow-x: hidden; /* Evitar el scroll horizontal */
     background-color: #f4f4f4; /* Fondo uniforme */
+    height: 100%; /* Garantizar que el body ocupe toda la altura del viewport */
+    display: flex;
+    flex-direction: column; /* Organizar el contenido en una columna */
 }
 
 body {
@@ -127,25 +130,72 @@ main {
     max-width: 1200px; /* Limitar el ancho máximo del contenido */
     margin: 0 auto; /* Centrar el contenido */
     box-sizing: border-box; /* Incluir padding y border en el ancho total */
+    flex: 1; /* Ocupa todo el espacio disponible entre el header y el footer */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar el contenido verticalmente si es necesario */
 }
 
 h1{
     text-align: center;
 }
 
-#filter{
+/* Contenedor del título y el filtro */
+#title-filter-container {
+    display: flex; /* Organizar elementos en una fila */
+    justify-content: center; /* Centrar horizontalmente el título y el filtro */
+    align-items: center; /* Alinear verticalmente */
+    gap: 0.5rem; /* Espaciado entre el título y el filtro */
+    margin-bottom: 1rem; /* Espaciado debajo del contenedor */
+    padding: 0; /* Eliminar el espaciado interno */
+    text-align: center; /* Asegurar que el texto esté centrado */
+}
+
+/* Estilo del título */
+#title-filter-container h1 {
+    margin: 0; /* Eliminar márgenes predeterminados */
+    font-size: 2rem; /* Tamaño del título */
+}
+
+/* Estilo del filtro */
+#filter {
     display: flex;
     justify-content: center;
-    padding: 1rem;
-    font-size: 1.3rem;
+    align-items: center;
+    padding: 0.3rem 0.8rem; /* Reducir el padding interno */
+    font-size: 1rem;
+    background-color: #fff; /* Fondo blanco para destacar */
+    border: 1px solid #ddd; /* Borde sutil */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    margin: 0; /* Eliminar márgenes adicionales */
+    width: fit-content; /* Ajustar el ancho al contenido */
 }
 
-label{
-    font-weight: 700;
+/* Estilo de la etiqueta del filtro */
+#filter label {
+    font-weight: bold;
+    margin-right: 0.3rem; /* Reducir el espacio entre la etiqueta y el selector */
+    color: #333; /* Color de texto oscuro para contraste */
 }
 
-#price-filter{
-    margin-left: 0.5rem;
+/* Estilo del selector del filtro */
+#price-filter {
+    padding: 0.3rem 0.8rem; /* Reducir el padding interno */
+    font-size: 1rem; /* Tamaño de fuente legible */
+    border: 1px solid #ddd; /* Borde sutil */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo claro */
+    color: #333; /* Color de texto */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el selector */
+    transition: all 0.3s ease; /* Transición suave para cambios de estilo */
+}
+
+/* Efecto hover en el selector */
+#price-filter:hover {
+    background-color: #f59e3b; /* Fondo naranja al pasar el cursor */
+    color: #fff; /* Texto blanco para contraste */
+    border-color: #f59e3b; /* Borde del mismo color que el fondo */
 }
 
 #places-list{
@@ -222,9 +272,9 @@ form button {
 /* Contenedor de reseñas */
 #reviews {
     display: grid; /* Usar diseño de grid */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajustar columnas dinámicamente */
-    gap: 20px; /* Espaciado entre las cajas */
-    padding: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajustar columnas dinámicamente */
+    gap: 10px; /* Reducir el espaciado entre las cajas */
+    padding: 15px; /* Reducir el padding del contenedor */
     justify-content: center; /* Centrar las reseñas */
     width: 100%; /* Asegurar que el contenedor ocupe todo el ancho */
     box-sizing: border-box; /* Incluir padding y border en el ancho total */
@@ -235,15 +285,18 @@ form button {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 20px;
+    padding: 10px; /* Reducir el padding interno */
     text-align: left;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-width: 250px; /* Ancho mínimo para mantener legibilidad */
+    min-width: 200px; /* Reducir el ancho mínimo */
     max-width: 100%; /* Evitar que las cajas excedan el ancho disponible */
+    height: auto; /* Ajustar la altura automáticamente */
     box-sizing: border-box; /* Incluir padding y border en el ancho total */
+    font-size: 1rem; /* Restaurar el tamaño de la fuente */
+    line-height: 1.5; /* Ajustar el espaciado entre líneas */
 }
 
 /* Ajustar el texto dentro de las reseñas */
@@ -276,7 +329,7 @@ textarea{
 
 /* Estilizar las estrellas */
 .stars {
-    color: #f59e3b; /* Color de las estrellas llenas */
-    font-size: 1.5rem;
-    letter-spacing: 2px; /* Espaciado entre estrellas */
+    font-size: 1.2rem; /* Reducir el tamaño de las estrellas */
+    color: #f59e3b;
+    letter-spacing: 1px; /* Reducir el espaciado entre estrellas */
 }

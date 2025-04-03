@@ -8,21 +8,24 @@
   </head>
   <body>
     <header>
-      <img class="logo" src="./images/logo.png" alt="logo" />
+      <a href="index.html">
+        <img class="logo" src="./images/logo.png" alt="logo" />
+      </a>
       <nav>
-        <a href="index.html" id="index-link">Index</a>
         <a href="login.html" id="login-link">Login</a>
         <a href="#" id="logout-link" style="display: none">Logout</a>
       </nav>
     </header>
     <main>
-      <h1>Available Places</h1>
-      <section id="filter">
-        <label for="price-filter">Max Price:</label>
-        <select id="price-filter">
-          <!-- Options will be populated dynamically -->
-        </select>
-      </section>
+      <div id="title-filter-container">
+        <h1>Available Places</h1>
+        <section id="filter">
+          <label for="price-filter">Max Price:</label>
+          <select id="price-filter">
+            <!-- Options will be populated dynamically -->
+          </select>
+        </section>
+      </div>
       <section id="places-list">
         <!-- List of places will be populated dynamically -->
       </section>

@@ -94,7 +94,6 @@ const show_review = (review_info) => {
     review_info.forEach((review) => {
         htmlContent += `
             <div class="review-box">
-                <p><strong>${review.user?.first_name || 'Anonymous'} ${review.user?.last_name || ''}</strong></p>
                 <p>${review.comment}</p>
                 <p><strong>Rating:</strong> <span class="stars">${getStars(review.rating)}</span></p>
             </div>

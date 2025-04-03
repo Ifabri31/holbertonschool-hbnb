@@ -49,6 +49,8 @@ const checkAuthentication = () => {
     if (PRICE_FILTER) fill_prices_filter(PRICE_FILTER);
   });
   
+  let place_data = []; // Variable global para almacenar los datos de los lugares
+
   // Obtener y mostrar los lugares
   const fetchPlaces = async (token) => {
     const optsget = {
@@ -63,8 +65,8 @@ const checkAuthentication = () => {
     try {
       const response = await fetch('http://localhost:5000/api/v1/places/', optsget);
       if (!response.ok) throw new Error(`Error: ${response.status}`);
-      const data = await response.json();
-      displayPlaces(data, 'all');
+      place_data = await response.json(); // Almacenar los datos globalmente
+      displayPlaces(place_data, 'all'); // Mostrar todos los lugares inicialmente
     } catch (error) {
       console.error('Error al obtener los lugares:', error);
     }
@@ -110,7 +112,7 @@ const checkAuthentication = () => {
       <option value="all" selected>All</option>
     `;
     price_filter.addEventListener('change', (event) => {
-      const price = price_filter.value;
-      displayPlaces(place_data, price);
+        const price = price_filter.value;
+        displayPlaces(place_data, price); // Usar los datos almacenados globalmente
     });
   };
